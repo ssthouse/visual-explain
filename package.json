@@ -1,7 +1,7 @@
 {
-  "name": "vue-d3-template",
+  "name": "visual-explain",
   "version": "1.0.0",
-  "description": "A template project for using Vue with D3.js",
+  "description": "Explain machanism visually ;)",
   "author": "ssthouse@163.com",
   "private": true,
   "scripts": {
