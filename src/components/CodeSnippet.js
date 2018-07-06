@@ -27,14 +27,16 @@ export default class CodeSnippet {
   /**
    * show content in current step
    */
-  getCurrentContent() {
+  getCurContent() {
+    this.getCurRows().join('\n')
+  }
+
+  getCurRows() {
     let curRowSum = 0
     for (let i = 0; i < this.curStep; i++) {
       curRowSum += this.stepArray[i]
     }
-    return this.getAllRows()
-      .slice(0, curRowSum)
-      .join('\n')
+    return this.getAllRows().slice(0, curRowSum)
   }
 
   getAllRows() {
