@@ -43,19 +43,28 @@ export default {
       this.updateView(this.codeSnippet.getCurRows())
     },
     autoPlay() {
-      console.log('auto play')
       this.codeSnippet.restore()
-      for (let i = 0; i < this.codeSteps.length; i++) {
-        this.codeSnippet.stepForward()
-        this.updateView(this.codeSnippet.getCurRows())
+      this.autoNextStep()
+    },
+    autoNextStep() {
+      if (this.codeSnippet.curStep >= this.codeSteps.length) {
+        return
       }
+      setTimeout(() => {
+        this.nextStep()
+        this.autoNextStep()
+      }, 1000)
     },
     updateView(rows) {
       const textRows = this.codeView.selectAll('text').data(rows)
+      textRows.style('stroke', 'black')
       textRows
         .enter()
         .append('text')
         .text(data => data)
+        .style('stroke', 'blue')
+        .style('font-family', 'monospace')
+        .style('stroke-width', 0.5)
         .attr('x', -100)
         .style('opacity', 0)
         .attr('xml:space', 'preserve')
@@ -64,9 +73,12 @@ export default {
         .attr('x', '30')
         .attr('y', (data, i) => (i + 1) * 30)
         .style('opacity', 1)
+        .style('stroke', 'black')
+        .style('stroke-width', 0.5)
       textRows
         .exit()
         .transition()
+        .style('stroke', 'red')
         .attr('x', '-100px')
         .attr('y', 0)
         .style('opacity', 0)
