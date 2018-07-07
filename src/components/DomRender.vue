@@ -22,7 +22,9 @@ export default {
       yScale: null,
       codeView: null,
       domTree: null,
-      codeSnippet
+      codeSnippet,
+      nodeRadius: 30,
+      nodeSize: 140
     }
   },
   mounted() {
@@ -86,7 +88,9 @@ export default {
       const domTreeData = this.$d3.hierarchy(
         this.codeSnippet.getCurDomTreeData()
       )
-      const treeBuilder = this.$d3.tree().nodeSize([50, 50])
+      const treeBuilder = this.$d3
+        .tree()
+        .nodeSize([this.nodeSize, this.nodeSize])
       const tree = treeBuilder(domTreeData)
       this.drawDomTree(tree.descendants(), tree.links())
     },
@@ -94,15 +98,6 @@ export default {
       const widthStr = this.domTree.style('width')
       const xOffset = parseInt(widthStr.substring(0, widthStr.length - 2)) / 2
       const yOffset = 100
-      const rects = this.domTree.selectAll('rect').data(descendants)
-      rects
-        .enter()
-        .append('rect')
-        .attr('class', 'node')
-        .attr('x', d => d.x + xOffset)
-        .attr('y', d => d.y + yOffset)
-        .attr('width', '40')
-        .attr('height', '40')
 
       const lines = this.domTree.selectAll('.link').data(links)
       const self = this
@@ -110,6 +105,8 @@ export default {
         .enter()
         .append('path')
         .attr('class', 'link')
+        .attr('fill', 'transparent')
+        .attr('stroke', 'black')
         .attr('d', function(d, i) {
           let linkPath = self.$d3
             .linkVertical()
@@ -127,6 +124,28 @@ export default {
             })
           return linkPath(d)
         })
+
+      const nodes = this.domTree.selectAll('rect').data(descendants)
+      nodes
+        .enter()
+        .append('circle')
+        .attr('class', 'node')
+        .attr('fill', 'white')
+        .attr('stroke', 'black')
+        .attr('cx', d => d.x + xOffset)
+        .attr('cy', d => d.y + yOffset)
+        .attr('r', this.nodeRadius)
+
+      const nodeLabels = this.domTree.selectAll('text').data(descendants)
+      nodeLabels
+        .enter()
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '20px')
+        .attr('dy', '.4em')
+        .text(d => d.data.name)
+        .attr('x', d => d.x + xOffset)
+        .attr('y', d => d.y + yOffset)
     }
   }
 }
