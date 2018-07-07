@@ -13,22 +13,19 @@
 </template>
 
 <script>
-import CodeSnippet, { sampleCode, codeSteps } from './CodeSnippet'
+import { codeSnippet } from './CodeSnippet'
 
 export default {
   name: 'Root',
   data() {
     return {
       yScale: null,
-      codeSnippet: null,
       codeView: null,
       domTree: null,
-      sampleCode,
-      codeSteps
+      codeSnippet
     }
   },
   mounted() {
-    this.codeSnippet = new CodeSnippet(this.sampleCode, this.codeSteps)
     this.domTree = this.$d3.select('#domTree')
     this.codeView = this.$d3.select('#codeView')
     window.code = this
@@ -47,7 +44,7 @@ export default {
       this.autoNextStep()
     },
     autoNextStep() {
-      if (this.codeSnippet.curStep >= this.codeSteps.length) {
+      if (this.codeSnippet.isLastStep()) {
         return
       }
       setTimeout(() => {
@@ -83,7 +80,8 @@ export default {
         .attr('y', 0)
         .style('opacity', 0)
         .remove()
-    }
+    },
+    updateDomTree() {}
   }
 }
 </script>

@@ -28,6 +28,13 @@ export default class CodeSnippet {
     this.curStep -= 1
   }
 
+  isLastStep() {
+    if (this.curStep >= this.stepArray.length) {
+      return true
+    }
+    return false
+  }
+
   /**
    * show content in current step
    */
@@ -72,3 +79,5 @@ export const sampleCode = `<!DOCTYPE html>
 </html>`
 
 export const codeSteps = [2, 7, 1, 1, 1, 8, 2]
+
+export const codeSnippet = new CodeSnippet(sampleCode, codeSteps)
