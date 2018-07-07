@@ -1,7 +1,10 @@
+import { domTreeData } from './DomTree'
+
 export default class CodeSnippet {
-  constructor(contentStr, stepArray) {
+  constructor(contentStr, stepArray, domTreeData) {
     this.contentStr = contentStr
     this.stepArray = stepArray
+    this.domTreeData = domTreeData
     this.initData()
   }
 
@@ -50,6 +53,11 @@ export default class CodeSnippet {
     return this.getAllRows().slice(0, curRowSum)
   }
 
+  // TODO
+  getCurDomTreeData() {
+    return this.domTreeData.rootDomNode
+  }
+
   getAllRows() {
     return this.rows
   }
@@ -80,4 +88,4 @@ export const sampleCode = `<!DOCTYPE html>
 
 export const codeSteps = [2, 7, 1, 1, 1, 8, 2]
 
-export const codeSnippet = new CodeSnippet(sampleCode, codeSteps)
+export const codeSnippet = new CodeSnippet(sampleCode, codeSteps, domTreeData)

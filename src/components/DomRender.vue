@@ -38,6 +38,7 @@ export default {
     nextStep() {
       this.codeSnippet.stepForward()
       this.updateView(this.codeSnippet.getCurRows())
+      this.updateDomTree()
     },
     autoPlay() {
       this.codeSnippet.restore()
@@ -81,7 +82,52 @@ export default {
         .style('opacity', 0)
         .remove()
     },
-    updateDomTree() {}
+    updateDomTree() {
+      const domTreeData = this.$d3.hierarchy(
+        this.codeSnippet.getCurDomTreeData()
+      )
+      const treeBuilder = this.$d3.tree().nodeSize([50, 50])
+      const tree = treeBuilder(domTreeData)
+      this.drawDomTree(tree.descendants(), tree.links())
+    },
+    drawDomTree(descendants, links) {
+      const widthStr = this.domTree.style('width')
+      const xOffset = parseInt(widthStr.substring(0, widthStr.length - 2)) / 2
+      const yOffset = 100
+      const rects = this.domTree.selectAll('rect').data(descendants)
+      rects
+        .enter()
+        .append('rect')
+        .attr('class', 'node')
+        .attr('x', d => d.x + xOffset)
+        .attr('y', d => d.y + yOffset)
+        .attr('width', '40')
+        .attr('height', '40')
+
+      const lines = this.domTree.selectAll('.link').data(links)
+      const self = this
+      lines
+        .enter()
+        .append('path')
+        .attr('class', 'link')
+        .attr('d', function(d, i) {
+          let linkPath = self.$d3
+            .linkVertical()
+            .x(function(d) {
+              return d.x + xOffset
+            })
+            .y(function(d) {
+              return d.y + yOffset
+            })
+            .source(function(d) {
+              return { x: d.source.x, y: d.source.y }
+            })
+            .target(function() {
+              return { x: d.target.x, y: d.target.y }
+            })
+          return linkPath(d)
+        })
+    }
   }
 }
 </script>
