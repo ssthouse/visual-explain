@@ -1,11 +1,15 @@
 <template>
-  <div id="app">
+  <v-app id="app">
+    <top-bar></top-bar>
     <router-view/>
-  </div>
+  </v-app>
 </template>
 
 <script>
+import TopBar from './components/TopBar'
+
 export default {
+  components: { 'top-bar': TopBar },
   name: 'App'
 }
 </script>

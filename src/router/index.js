@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import DOMRender from '@/components/DomRender'
+import DOMRender from '../components/dom-render/DomRender'
 import Index from '../components/Index'
 
 Vue.use(Router)
