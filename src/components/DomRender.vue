@@ -194,18 +194,26 @@ export default {
     display: flex;
     align-items: stretch;
 
-    #codeView,
-    #domTree {
-      width: 50%;
-      height: 100%;
-    }
-
     #codeView {
+      width: 60%;
+      height: 100%;
       background-color: whitesmoke;
     }
 
     #domTree {
-      background-color: grey;
+      width: 40%;
+      height: 100%;
+
+      circle,
+      path {
+        stroke: #2196f3;
+        stroke-width: 2px;
+      }
+
+      text {
+        stroke: #1976d2;
+        stroke-width: 0.5px;
+      }
     }
   }
 }
