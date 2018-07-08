@@ -7,7 +7,11 @@
     </div>
     <div id="svg-container">
       <svg id="codeView"></svg>
-      <svg id="domTree"></svg>
+      <svg id="domTree">
+        <g id="linkContainer"></g>
+        <g id="circleContainer"></g>
+        <g id="textContainer"></g>
+      </svg>
     </div>
   </div>
 </template>
@@ -30,12 +34,16 @@ export default {
   mounted() {
     this.domTree = this.$d3.select('#domTree')
     this.codeView = this.$d3.select('#codeView')
+    this.linkContainer = this.$d3.select('#linkContainer')
+    this.circleContainer = this.$d3.select('#circleContainer')
+    this.textContainer = this.$d3.select('#textContainer')
     window.code = this
   },
   methods: {
     previousStep() {
       this.codeSnippet.stepBackword()
       this.updateView(this.codeSnippet.getCurRows())
+      this.updateDomTree()
     },
     nextStep() {
       this.codeSnippet.stepForward()
@@ -43,8 +51,15 @@ export default {
       this.updateDomTree()
     },
     autoPlay() {
+      this.clearDomTree()
       this.codeSnippet.restore()
       this.autoNextStep()
+    },
+    clearDomTree() {
+      this.codeView.selectAll('*').remove()
+      this.linkContainer.selectAll('*').remove()
+      this.circleContainer.selectAll('*').remove()
+      this.textContainer.selectAll('*').remove()
     },
     autoNextStep() {
       if (this.codeSnippet.isLastStep()) {
@@ -85,6 +100,10 @@ export default {
         .remove()
     },
     updateDomTree() {
+      if (!this.codeSnippet.getCurDomTreeData()) {
+        this.drawDomTree([], [])
+        return
+      }
       const domTreeData = this.$d3.hierarchy(
         this.codeSnippet.getCurDomTreeData()
       )
@@ -99,7 +118,7 @@ export default {
       const xOffset = parseInt(widthStr.substring(0, widthStr.length - 2)) / 2
       const yOffset = 100
 
-      const lines = this.domTree.selectAll('.link').data(links)
+      const lines = this.linkContainer.selectAll('.link').data(links)
       const self = this
       lines
         .enter()
@@ -107,6 +126,7 @@ export default {
         .attr('class', 'link')
         .attr('fill', 'transparent')
         .attr('stroke', 'black')
+        .merge(lines)
         .attr('d', function(d, i) {
           let linkPath = self.$d3
             .linkVertical()
@@ -124,28 +144,39 @@ export default {
             })
           return linkPath(d)
         })
+      lines.exit().remove()
 
-      const nodes = this.domTree.selectAll('rect').data(descendants)
+      const nodes = this.circleContainer
+        .selectAll('circle')
+        .data(descendants, d => d.data.key)
       nodes
         .enter()
         .append('circle')
         .attr('class', 'node')
         .attr('fill', 'white')
         .attr('stroke', 'black')
+        .attr('r', this.nodeRadius)
+        .merge(nodes)
+        .transition()
         .attr('cx', d => d.x + xOffset)
         .attr('cy', d => d.y + yOffset)
-        .attr('r', this.nodeRadius)
+      nodes.exit().remove()
 
-      const nodeLabels = this.domTree.selectAll('text').data(descendants)
+      const nodeLabels = this.textContainer
+        .selectAll('text')
+        .data(descendants, d => d.data.key)
       nodeLabels
         .enter()
         .append('text')
         .attr('text-anchor', 'middle')
         .attr('font-size', '20px')
         .attr('dy', '.4em')
-        .text(d => d.data.name)
+        .merge(nodeLabels)
+        .transition()
         .attr('x', d => d.x + xOffset)
         .attr('y', d => d.y + yOffset)
+        .text(d => d.data.name)
+      nodeLabels.exit().remove()
     }
   }
 }

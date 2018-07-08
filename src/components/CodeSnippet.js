@@ -10,29 +10,38 @@ export default class CodeSnippet {
 
   initData() {
     this.rows = this.contentStr.split('\n')
-    this.curStep = 0
+    this.curStep = -1
   }
 
   restore() {
-    this.curStep = 0
+    this.curStep = -1
+    this.hideAll()
+  }
+
+  hideAll() {
+    this.stepArray.forEach(stepItem => {
+      this.domTreeData.hide(stepItem['nodeName'])
+    })
   }
 
   stepForward() {
-    if (this.curStep >= this.stepArray.length) {
+    if (this.curStep >= this.stepArray.length - 1) {
       return
     }
     this.curStep += 1
+    this.domTreeData.show(this.stepArray[this.curStep]['nodeName'])
   }
 
   stepBackword() {
-    if (this.curStep <= 0) {
+    if (this.curStep <= -1) {
       return
     }
     this.curStep -= 1
+    this.domTreeData.hide(this.stepArray[this.curStep + 1]['nodeName'])
   }
 
   isLastStep() {
-    if (this.curStep >= this.stepArray.length) {
+    if (this.curStep >= this.stepArray.length - 1) {
       return true
     }
     return false
@@ -47,15 +56,15 @@ export default class CodeSnippet {
 
   getCurRows() {
     let curRowSum = 0
-    for (let i = 0; i < this.curStep; i++) {
-      curRowSum += this.stepArray[i]
+    for (let i = 0; i <= this.curStep; i++) {
+      curRowSum += this.stepArray[i]['count']
     }
     return this.getAllRows().slice(0, curRowSum)
   }
 
   // TODO
   getCurDomTreeData() {
-    return this.domTreeData.rootDomNode
+    return this.domTreeData.getData()
   }
 
   getAllRows() {
@@ -68,24 +77,29 @@ export const sampleCode = `<!DOCTYPE html>
     <head>
     <title>Web app lifecycle</title>
     <style>
-        #first { color: green;}
+        #list { color: green;}
         #second { color: red;}
     </style>
     </head>
     <body>
         <h1>head one</h1>
-        <ul id="first"></ul>
+        <ul id="list"></ul>
         <script>
-            function addMessage(element, message){
-              var messageElement = document.createElement("li");
-              messageElement.textContent = message;
-              element.appendChild(messageElement);
-            }
-            addMessage(document.getElementById('first'), 'I am a li')
+            var liElement = document.createElement("li");
+            liElement.textContent = 'I am a li';
+            document.getElementById('list').appendChild(liElement);
         </script>
     </body>
 </html>`
 
-export const codeSteps = [2, 7, 1, 1, 1, 8, 2]
+export const codeSteps = [
+  { count: 2, nodeName: 'html' },
+  { count: 7, nodeName: '' },
+  { count: 1, nodeName: 'body' },
+  { count: 1, nodeName: 'h1' },
+  { count: 1, nodeName: 'ul' },
+  { count: 5, nodeName: 'li' },
+  { count: 2, nodeName: '' }
+]
 
 export const codeSnippet = new CodeSnippet(sampleCode, codeSteps, domTreeData)
