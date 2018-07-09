@@ -75,11 +75,11 @@ export default class CodeSnippet {
 export const sampleCode = `<!DOCTYPE html>
 <html>
     <head>
-    <title>Web app lifecycle</title>
-    <style>
-        #list { color: green;}
-        #second { color: red;}
-    </style>
+      <title>Web app lifecycle</title>
+      <style>
+          #list { color: green;}
+          #second { color: red;}
+      </style>
     </head>
     <body>
         <h1>head one</h1>
@@ -94,7 +94,10 @@ export const sampleCode = `<!DOCTYPE html>
 
 export const codeSteps = [
   { count: 2, nodeName: 'html' },
-  { count: 7, nodeName: '' },
+  { count: 1, nodeName: 'head' },
+  { count: 1, nodeName: 'title' },
+  { count: 4, nodeName: 'style' },
+  { count: 1, nodeName: '' },
   { count: 1, nodeName: 'body' },
   { count: 1, nodeName: 'h1' },
   { count: 1, nodeName: 'ul' },

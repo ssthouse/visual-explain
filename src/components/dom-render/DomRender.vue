@@ -28,7 +28,8 @@ export default {
       domTree: null,
       codeSnippet,
       nodeRadius: 30,
-      nodeSize: 140
+      nodeWidth: 80,
+      nodeHeight: 140
     }
   },
   mounted() {
@@ -109,7 +110,7 @@ export default {
       )
       const treeBuilder = this.$d3
         .tree()
-        .nodeSize([this.nodeSize, this.nodeSize])
+        .nodeSize([this.nodeWidth, this.nodeHeight])
       const tree = treeBuilder(domTreeData)
       this.drawDomTree(tree.descendants(), tree.links())
     },
