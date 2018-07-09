@@ -4,7 +4,7 @@
     <v-toolbar-title>Visual Explain</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat href="https://github.com/ssthouse">
+      <v-btn flat @click="openMyGithub()">
         <v-avatar size=42>
           <img src="https://avatars3.githubusercontent.com/u/10973821?s=460&v=4">
         </v-avatar>
@@ -24,7 +24,16 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    openMyGithub() {
+      const a = document.createElement('a')
+      a.target = '_blank'
+      a.href = 'https://github.com/ssthouse'
+      a.click()
+    }
+  }
+}
 </script>
 
 <style>

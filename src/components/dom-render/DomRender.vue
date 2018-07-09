@@ -1,9 +1,21 @@
 <template>
   <div id="domRender">
     <div id="control-panel">
-      <v-btn @click="previousStep()">Previous Step</v-btn>
-      <v-btn @click="nextStep()">Next Step</v-btn>
-      <v-btn @click="autoPlay()">Auto play</v-btn>
+      <v-tooltip bottom>
+        <v-btn @click="previousStep()" icon color="primary" slot="activator">
+          <v-icon>navigate_before</v-icon>
+        </v-btn>
+        <span>Step Backward</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <v-btn @click="nextStep()" icon color="primary" slot="activator">
+          <v-icon>navigate_next</v-icon>
+        </v-btn>
+        <span>Step Forward</span>
+      </v-tooltip>
+
+      <v-btn @click="autoPlay()" color="primary">Auto play</v-btn>
     </div>
     <div id="svg-container">
       <svg id="codeView"></svg>
