@@ -1,6 +1,6 @@
 <template>
   <v-toolbar>
-    <v-toolbar-side-icon></v-toolbar-side-icon>
+    <v-toolbar-side-icon @click="toMainPage()"></v-toolbar-side-icon>
     <v-toolbar-title>Visual Explain</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
@@ -25,12 +25,17 @@
 
 <script>
 export default {
+  props: ['indexRoute'],
   methods: {
     openMyGithub() {
       const a = document.createElement('a')
       a.target = '_blank'
       a.href = 'https://github.com/ssthouse'
       a.click()
+    },
+    toMainPage() {
+      const route = this.indexRoute || '/'
+      this.$router.push(route)
     }
   }
 }

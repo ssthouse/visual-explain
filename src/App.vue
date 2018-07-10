@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <top-bar></top-bar>
+    <top-bar :indexRoute="indexRoute"></top-bar>
     <router-view/>
   </v-app>
 </template>
@@ -10,7 +10,12 @@ import TopBar from './components/TopBar'
 
 export default {
   components: { 'top-bar': TopBar },
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      indexRoute: '/list'
+    }
+  }
 }
 </script>
 
