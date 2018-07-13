@@ -1,7 +1,7 @@
 <template>
   <div class="index-list">
     <div v-for="item in links" v-bind:key="item.to" class="item" @click="goto(item.to)">
-      <span class="title" :to="item.to">Dom Render</span>
+      <span class="title" :to="item.to">{{item.title}}</span>
       <img :src="item.imgSrc" />
     </div>
   </div>
@@ -16,6 +16,12 @@ export default {
         {
           title: 'Dom Render',
           to: '/list/domRender',
+          imgSrc:
+            'https://raw.githubusercontent.com/ssthouse/d3-blog/master/dom-render/img/step9.png'
+        },
+        {
+          title: 'Mobile Patent Suit',
+          to: '/list/patent-suit',
           imgSrc:
             'https://raw.githubusercontent.com/ssthouse/d3-blog/master/dom-render/img/step9.png'
         }
@@ -45,6 +51,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
   .item {
     cursor: pointer;
