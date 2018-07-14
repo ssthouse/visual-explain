@@ -17,7 +17,7 @@ export default {
   },
   methods: {},
   mounted() {
-    const svgNode = this.$d3.select('#main-svg')
+    const svgNode = this.$d3.select('.main-svg')
     this.graphGenerator = new GraphGenerator(svgNode, this.$d3)
     this.graphGenerator.draw()
   }

@@ -4,11 +4,8 @@ export default class GraphGenerator {
     this.d3 = d3
   }
 
-  draw() {
-    console.log('start draw')
-
-    // http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
-    var links = [
+  initData() {
+    this.links = [
       { source: 'Microsoft', target: 'Amazon', type: 'licensing' },
       { source: 'Microsoft', target: 'HTC', type: 'licensing' },
       { source: 'Samsung', target: 'Apple', type: 'suit' },
@@ -39,31 +36,21 @@ export default class GraphGenerator {
       { source: 'Nokia', target: 'Qualcomm', type: 'suit' }
     ]
 
-    var nodes = {}
+    this.nodes = {}
 
     // Compute the distinct nodes from the links.
-    links.forEach(function(link) {
+    this.links.forEach(link => {
       link.source =
-        nodes[link.source] || (nodes[link.source] = { name: link.source })
+        this.nodes[link.source] ||
+        (this.nodes[link.source] = { name: link.source })
       link.target =
-        nodes[link.target] || (nodes[link.target] = { name: link.target })
+        this.nodes[link.target] ||
+        (this.nodes[link.target] = { name: link.target })
     })
+    console.log(this.links)
+  }
 
-    var width = 960
-    var height = 500
-
-    var force = this.d3.layout
-      .force()
-      .nodes(this.d3.values(nodes))
-      .links(links)
-      .size([width, height])
-      .linkDistance(60)
-      .charge(-300)
-      .on('tick', tick)
-      .start()
-
-    this.svgNode.attr('width', width).attr('height', height)
-
+  initView() {
     // Per-type markers, as they don't inherit styles.
     this.svgNode
       .append('defs')
@@ -83,10 +70,11 @@ export default class GraphGenerator {
       .append('path')
       .attr('d', 'M0,-5L10,0L0,5')
 
-    var path = this.svgNode
+    this.path = this.svgNode
       .append('g')
+      .attr('transform', 'translate(200, 200)')
       .selectAll('path')
-      .data(force.links())
+      .data(this.links)
       .enter()
       .append('path')
       .attr('class', function(d) {
@@ -96,19 +84,21 @@ export default class GraphGenerator {
         return 'url(#' + d.type + ')'
       })
 
-    var circle = this.svgNode
+    this.circle = this.svgNode
       .append('g')
+      .attr('transform', 'translate(200, 200)')
       .selectAll('circle')
-      .data(force.nodes())
+      .data(this.d3.values(this.nodes))
       .enter()
       .append('circle')
       .attr('r', 6)
-      .call(force.drag)
+      .call(this.enableDragFunc())
 
-    var text = this.svgNode
+    this.text = this.svgNode
       .append('g')
+      .attr('transform', 'translate(200, 200)')
       .selectAll('text')
-      .data(force.nodes())
+      .data(this.d3.values(this.nodes))
       .enter()
       .append('text')
       .attr('x', 8)
@@ -116,13 +106,12 @@ export default class GraphGenerator {
       .text(function(d) {
         return d.name
       })
+  }
 
-    // Use elliptical arc path segments to doubly-encode directionality.
-    function tick() {
-      path.attr('d', linkArc)
-      circle.attr('transform', transform)
-      text.attr('transform', transform)
-    }
+  draw() {
+    console.log('start draw')
+
+    this.initData()
 
     function linkArc(d) {
       var dx = d.target.x - d.source.x
@@ -147,5 +136,47 @@ export default class GraphGenerator {
     function transform(d) {
       return 'translate(' + d.x + ',' + d.y + ')'
     }
+
+    var width = 960
+    var height = 500
+
+    const forceLink = this.d3.forceLink(this.links).distance(80)
+
+    this.force = this.d3
+      .forceSimulation(this.d3.values(this.nodes))
+      .force('charge', this.d3.forceManyBody().strength(-150))
+      .force('link', forceLink)
+      .on('tick', () => {
+        if (this.path) {
+          this.path.attr('d', linkArc)
+          this.circle.attr('transform', transform)
+          this.text.attr('transform', transform)
+        }
+      })
+
+    console.log(this.force.nodes())
+    this.svgNode.attr('width', width).attr('height', height)
+
+    this.initView()
+    this.enableDragFunc()
+  }
+
+  enableDragFunc() {
+    return this.d3
+      .drag()
+      .on('start', d => {
+        if (!this.d3.event.active) this.force.alphaTarget(0.3).restart()
+        d.fx = this.d3.event.x
+        d.fy = this.d3.event.y
+      })
+      .on('drag', d => {
+        d.fx = this.d3.event.x
+        d.fy = this.d3.event.y
+      })
+      .on('end', d => {
+        if (!this.d3.event.active) this.force.alphaTarget(0)
+        d.fx = null
+        d.fy = null
+      })
   }
 }
