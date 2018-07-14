@@ -15,6 +15,9 @@ export default {
     return {
       indexRoute: '/list'
     }
+  },
+  mounted() {
+    window.$d3 = this.$d3
   }
 }
 </script>

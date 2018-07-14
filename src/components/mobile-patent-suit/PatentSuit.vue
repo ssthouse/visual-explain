@@ -1,7 +1,6 @@
 <template>
   <div id="patent-suit">
     <svg class="main-svg"></svg>
-    <div class="explain-panel"></div>
   </div>
 </template>
 
@@ -20,6 +19,7 @@ export default {
     const svgNode = this.$d3.select('.main-svg')
     this.graphGenerator = new GraphGenerator(svgNode, this.$d3)
     this.graphGenerator.draw()
+    this.graphGenerator.drawSampleNodes()
   }
 }
 </script>
@@ -31,7 +31,7 @@ export default {
   height: 100%;
 
   .main-svg {
-    width: 60%;
+    width: 100%;
     background-color: #eeeeee;
 
     .link {
@@ -49,7 +49,7 @@ export default {
     }
 
     #resolved {
-      fill: #1565C0;
+      fill: #1565c0;
     }
 
     .link.licensing {
@@ -57,7 +57,7 @@ export default {
     }
 
     .link.resolved {
-      stroke: #1565C0;
+      stroke: #1565c0;
       stroke-dasharray: 0, 2 1;
     }
 
@@ -72,10 +72,11 @@ export default {
       pointer-events: none;
       text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
     }
-  }
 
-  .explain-panel {
-    width: 40%;
+    .msg-title {
+      font-size: 16px;
+      font-weight: bold;
+    }
   }
 }
 </style>

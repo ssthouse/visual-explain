@@ -90,6 +90,7 @@ export default class GraphGenerator {
       .enter()
       .append('circle')
       .attr('r', 10)
+      .style('cursor', 'pointer')
       .call(this.enableDragFunc())
 
     this.text = this.svgNode
@@ -103,45 +104,44 @@ export default class GraphGenerator {
       .text(d => d.name)
   }
 
+  linkArc(d) {
+    const dx = d.target.x - d.source.x
+    const dy = d.target.y - d.source.y
+    const dr = Math.sqrt(dx * dx + dy * dy)
+    return (
+      'M' +
+      d.source.x +
+      ',' +
+      d.source.y +
+      'A' +
+      dr +
+      ',' +
+      dr +
+      ' 0 0,1 ' +
+      d.target.x +
+      ',' +
+      d.target.y
+    )
+  }
+
   draw() {
-    console.log('start draw')
-
     this.initData()
+    this.initView()
 
-    function linkArc(d) {
-      var dx = d.target.x - d.source.x
-      var dy = d.target.y - d.source.y
-      var dr = Math.sqrt(dx * dx + dy * dy)
-      return (
-        'M' +
-        d.source.x +
-        ',' +
-        d.source.y +
-        'A' +
-        dr +
-        ',' +
-        dr +
-        ' 0 0,1 ' +
-        d.target.x +
-        ',' +
-        d.target.y
-      )
-    }
-
-    function transform(d) {
-      return 'translate(' + d.x + ',' + d.y + ')'
-    }
-
-    var width = parseInt(
+    const width = parseInt(
       this.svgNode
         .style('width')
         .substring(0, this.svgNode.style('width').length - 2)
     )
-    var height = parseInt(
+    const height = parseInt(
       this.svgNode
         .style('height')
         .substring(0, this.svgNode.style('height').length - 2)
     )
+
+    function transform(d) {
+      return 'translate(' + d.x + ',' + d.y + ')'
+    }
 
     const forceLink = this.d3
       .forceLink(this.links)
@@ -151,22 +151,26 @@ export default class GraphGenerator {
 
     this.force = this.d3
       .forceSimulation(this.d3.values(this.nodes))
-      .force('charge', this.d3.forceManyBody().strength(-50))
+      .force('charge', this.d3.forceManyBody().strength(50))
       .force('collide', this.d3.forceCollide().radius(50))
-      .force('center', this.d3.forceCenter(width / 2, height / 2))
       .force('link', forceLink)
+      .force(
+        'center',
+        this.d3
+          .forceCenter()
+          .x(width / 2)
+          .y(height / 2)
+      )
       .on('tick', () => {
         if (this.path) {
-          this.path.attr('d', linkArc)
+          this.path.attr('d', this.linkArc)
           this.circle.attr('transform', transform)
           this.text.attr('transform', transform)
         }
       })
 
-    console.log(this.force.nodes())
     this.svgNode.attr('width', width).attr('height', height)
 
-    this.initView()
     this.enableDragFunc()
   }
 
@@ -187,5 +191,78 @@ export default class GraphGenerator {
         d.fx = null
         d.fy = null
       })
+  }
+
+  drawSampleNodes() {
+    const sampleContainer = this.svgNode
+      .append('g')
+      .attr('class', 'sampleContainer')
+    const xIndex = 200
+    const yIndex = 100
+
+    const sampleData = [
+      {
+        source: { name: 'Nokia', x: xIndex, y: yIndex },
+        target: { name: 'Qualcomm', x: xIndex + 100, y: yIndex },
+        title: 'Still in suit:',
+        type: 'suit'
+      },
+      {
+        source: { name: 'Qualcomm', x: xIndex, y: yIndex + 100 },
+        target: { name: 'Nokia', x: xIndex + 100, y: yIndex + 100 },
+        title: 'Already resolved:',
+        type: 'resolved'
+      },
+      {
+        source: { name: 'Microsoft', x: xIndex, y: yIndex + 200 },
+        target: { name: 'Amazon', x: xIndex + 100, y: yIndex + 200 },
+        title: 'Locensing now:',
+        type: 'licensing'
+      }
+    ]
+
+    const nodes = {}
+    sampleData.forEach((link, index) => {
+      nodes[link.source.name + index] = link.source
+      nodes[link.target.name + index] = link.target
+    })
+    sampleContainer
+      .selectAll('path')
+      .data(sampleData)
+      .enter()
+      .append('path')
+      .attr('class', d => 'link ' + d.type)
+      .attr('marker-end', d => 'url(#' + d.type + ')')
+      .attr('d', this.linkArc)
+
+    sampleContainer
+      .selectAll('circle')
+      .data(this.d3.values(nodes))
+      .enter()
+      .append('circle')
+      .attr('r', 10)
+      .style('cursor', 'pointer')
+      .attr('transform', d => `translate(${d.x}, ${d.y})`)
+
+    sampleContainer
+      .selectAll('.companyTitle')
+      .data(this.d3.values(nodes))
+      .enter()
+      .append('text')
+      .style('text-anchor', 'middle')
+      .attr('x', d => d.x)
+      .attr('y', d => d.y + 24)
+      .text(d => d.name)
+
+    sampleContainer
+      .selectAll('.title')
+      .data(sampleData)
+      .enter()
+      .append('text')
+      .attr('class', 'msg-title')
+      .style('text-anchor', 'end')
+      .attr('x', d => d.source.x - 30)
+      .attr('y', d => d.source.y + 5)
+      .text(d => d.title)
   }
 }
