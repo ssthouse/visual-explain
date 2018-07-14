@@ -62,7 +62,7 @@ export default class GraphGenerator {
         return d
       })
       .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 15)
+      .attr('refX', 22)
       .attr('refY', -1.5)
       .attr('markerWidth', 6)
       .attr('markerHeight', 6)
@@ -72,7 +72,6 @@ export default class GraphGenerator {
 
     this.path = this.svgNode
       .append('g')
-      .attr('transform', 'translate(200, 200)')
       .selectAll('path')
       .data(this.links)
       .enter()
@@ -86,26 +85,22 @@ export default class GraphGenerator {
 
     this.circle = this.svgNode
       .append('g')
-      .attr('transform', 'translate(200, 200)')
       .selectAll('circle')
       .data(this.d3.values(this.nodes))
       .enter()
       .append('circle')
-      .attr('r', 6)
+      .attr('r', 10)
       .call(this.enableDragFunc())
 
     this.text = this.svgNode
       .append('g')
-      .attr('transform', 'translate(200, 200)')
       .selectAll('text')
       .data(this.d3.values(this.nodes))
       .enter()
       .append('text')
-      .attr('x', 8)
+      .attr('x', 12)
       .attr('y', '.31em')
-      .text(function(d) {
-        return d.name
-      })
+      .text(d => d.name)
   }
 
   draw() {
@@ -137,14 +132,28 @@ export default class GraphGenerator {
       return 'translate(' + d.x + ',' + d.y + ')'
     }
 
-    var width = 960
-    var height = 500
+    var width = parseInt(
+      this.svgNode
+        .style('width')
+        .substring(0, this.svgNode.style('width').length - 2)
+    )
+    var height = parseInt(
+      this.svgNode
+        .style('height')
+        .substring(0, this.svgNode.style('height').length - 2)
+    )
 
-    const forceLink = this.d3.forceLink(this.links).distance(80)
+    const forceLink = this.d3
+      .forceLink(this.links)
+      .distance(80)
+      .strength(0.2)
+      .iterations(3)
 
     this.force = this.d3
       .forceSimulation(this.d3.values(this.nodes))
-      .force('charge', this.d3.forceManyBody().strength(-150))
+      .force('charge', this.d3.forceManyBody().strength(-50))
+      .force('collide', this.d3.forceCollide().radius(50))
+      .force('center', this.d3.forceCenter(width / 2, height / 2))
       .force('link', forceLink)
       .on('tick', () => {
         if (this.path) {

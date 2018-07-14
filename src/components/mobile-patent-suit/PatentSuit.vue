@@ -36,30 +36,39 @@ export default {
 
     .link {
       fill: none;
-      stroke: #666;
+      stroke: #f44336;
       stroke-width: 1.5px;
     }
 
     #licensing {
-      fill: green;
+      fill: #009688;
+    }
+
+    #suit {
+      fill: #f44336;
+    }
+
+    #resolved {
+      fill: #1565C0;
     }
 
     .link.licensing {
-      stroke: green;
+      stroke: #009688;
     }
 
     .link.resolved {
+      stroke: #1565C0;
       stroke-dasharray: 0, 2 1;
     }
 
     circle {
-      fill: #ccc;
-      stroke: #333;
+      fill: #fff;
+      stroke: grey;
       stroke-width: 1.5px;
     }
 
     text {
-      font: 10px sans-serif;
+      font: 14px sans-serif;
       pointer-events: none;
       text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
     }
