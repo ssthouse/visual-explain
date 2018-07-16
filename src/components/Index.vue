@@ -23,7 +23,7 @@ export default {
           title: 'Mobile Patent Suit',
           to: '/list/patent-suit',
           imgSrc:
-            'https://raw.githubusercontent.com/ssthouse/d3-blog/master/dom-render/img/step9.png'
+            'https://raw.githubusercontent.com/ssthouse/d3-blog/master/mobile-patent-suit/img/row_display.png'
         }
       ]
     }

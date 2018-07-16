@@ -47,7 +47,7 @@ export default class GraphGenerator {
         this.nodes[link.target] ||
         (this.nodes[link.target] = { name: link.target })
     })
-    console.log(this.links)
+    console.log(this.nodes)
   }
 
   initView() {
