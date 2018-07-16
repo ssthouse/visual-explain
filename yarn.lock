@@ -78,6 +78,15 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@ssthouse/personal-component-set@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@ssthouse/personal-component-set/-/personal-component-set-0.1.4.tgz#4968379dcfffa49bba8167aeeac09710a7b37348"
+  dependencies:
+    less "^3.7.1"
+    less-loader "^4.1.0"
+    vue "^2.5.16"
+    vuetify "^1.1.4"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -3814,6 +3823,19 @@ less@^3.5.1:
     request "^2.83.0"
     source-map "~0.6.0"
 
+less@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/less/-/less-3.7.1.tgz#192e9dcef456ba3181a4e8d78a200f72a75e5c30"
+  optionalDependencies:
+    errno "^0.1.1"
+    graceful-fs "^4.1.2"
+    image-size "~0.5.0"
+    mime "^1.4.1"
+    mkdirp "^0.5.0"
+    promise "^7.1.1"
+    request "^2.83.0"
+    source-map "~0.6.0"
+
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.3.0.tgz#3b09924edf9f083c0490fdd4c0bc4421e04764ee"
@@ -6356,13 +6378,17 @@ vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
 
-vue@^2.5.2:
+vue@^2.5.16, vue@^2.5.2:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.16.tgz#07edb75e8412aaeed871ebafa99f4672584a0085"
 
 vuetify@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.1.1.tgz#8d8f64306a45aaf862487addae8decf082dac0a3"
+
+vuetify@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.1.4.tgz#2fd50f38a580bfe51c346d273a8d88fad4144302"
 
 watchpack@^1.4.0:
   version "1.6.0"

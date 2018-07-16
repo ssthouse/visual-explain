@@ -1,19 +1,16 @@
 <template>
   <v-app id="app">
-    <top-bar :indexRoute="indexRoute"></top-bar>
+    <top-bar :sourceCodeLink="sourceCodeLink"></top-bar>
     <router-view/>
   </v-app>
 </template>
 
 <script>
-import TopBar from './components/TopBar'
-
 export default {
-  components: { 'top-bar': TopBar },
   name: 'App',
   data() {
     return {
-      indexRoute: '/list'
+      sourceCodeLink: 'https://github.com/ssthouse/visual-explain'
     }
   },
   mounted() {
