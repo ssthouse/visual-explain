@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <top-bar :sourceCodeLink="sourceCodeLink"></top-bar>
+    <top-bar @to-main-page="toMainPage" :sourceCodeLink="sourceCodeLink" :title="title"></top-bar>
     <router-view/>
   </v-app>
 </template>
@@ -10,7 +10,13 @@ export default {
   name: 'App',
   data() {
     return {
-      sourceCodeLink: 'https://github.com/ssthouse/visual-explain'
+      sourceCodeLink: 'https://github.com/ssthouse/visual-explain',
+      title: 'Visual Explain'
+    }
+  },
+  methods: {
+    toMainPage() {
+      this.$router.push('/')
     }
   },
   mounted() {
