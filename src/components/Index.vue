@@ -40,6 +40,13 @@ export default {
       if (!route) {
         return
       }
+      if (route.startsWith('http')) {
+        const a = document.createElement('a')
+        a.target = '_blank'
+        a.href = route
+        a.click()
+        return
+      }
       this.$router.push(route)
     }
   },
