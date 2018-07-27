@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import filePath from '../assets/github-viz.png'
+
 export default {
   name: 'Root',
   data() {
@@ -24,6 +26,11 @@ export default {
           to: '/list/patent-suit',
           imgSrc:
             'https://raw.githubusercontent.com/ssthouse/d3-blog/master/mobile-patent-suit/img/row_display.png'
+        },
+        {
+          title: 'Visual Github Repo',
+          to: 'https://ssthouse.github.io/github-visualization/#/main',
+          imgSrc: filePath
         }
       ]
     }
