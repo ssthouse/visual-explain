@@ -31,6 +31,12 @@ export default {
           title: 'Visual Github Repo',
           to: 'https://ssthouse.github.io/github-visualization/#/main',
           imgSrc: filePath
+        },
+        {
+          title: 'Depth first traversal',
+          to: '/list/dft',
+          imgSrc:
+            'https://raw.githubusercontent.com/ssthouse/d3-blog/master/mobile-patent-suit/img/row_display.png'
         }
       ]
     }
