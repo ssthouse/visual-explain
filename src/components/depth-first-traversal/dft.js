@@ -22,7 +22,7 @@ export class Dft {
 export class Node {
   constructor(value, childrenNodes = []) {
     this.value = value
-    this.childrenNodes = []
+    this.childrenNodes = childrenNodes
   }
 
   addChild(childNode) {
