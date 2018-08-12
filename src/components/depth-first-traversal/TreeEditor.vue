@@ -1,5 +1,7 @@
 <template>
-  <div id="tree-container" class="tree-container"></div>
+  <div id="tree-container" class="tree-container">
+    <svg id='svg-container'></svg>
+  </div>
 </template>
 
 <script>
@@ -11,30 +13,25 @@ export default {
     return {
       width: 300,
       height: 300,
+      nodeWidth: 40,
       sampleTree: constructTestData(),
-      rootNode: null
+      rootNode: null,
+      svgRootNode: null
     }
   },
   methods: {
     initSampleTree() {
-      console.log('sample tree data:')
-      console.log(this.sampleTree)
-
       const hierarchyData = this.$d3.hierarchy(
         this.sampleTree,
         d => d.childrenNodes
       )
-      console.log('hierarchy tree data:')
-      console.log(hierarchyData)
 
       const treeGenerator = this.$d3.tree().size([this.width, this.height])
       const treeData = treeGenerator(hierarchyData)
-      console.log(treeData)
       this.drawNodes(treeData.descendants())
       this.drawLinks(treeData.links())
     },
     drawNodes(nodes) {
-      console.log(nodes)
       const treeNodes = this.rootNode.selectAll('.tree-node').data(nodes)
       treeNodes
         .enter()
@@ -47,7 +44,7 @@ export default {
       treeNodes.exit().remove()
     },
     drawLinks(links) {
-      const lines = this.rootNode.selectAll('.link').data(links)
+      const lines = this.svgRootNode.selectAll('.link').data(links)
       const self = this
       lines
         .enter()
@@ -60,10 +57,10 @@ export default {
           let linkPath = self.$d3
             .linkVertical()
             .x(function(d) {
-              return d.x
+              return d.x + self.nodeWidth / 2
             })
             .y(function(d) {
-              return d.y
+              return d.y + 2 * self.nodeWidth / 3
             })
             .source(function(d) {
               return { x: d.source.x, y: d.source.y }
@@ -78,6 +75,7 @@ export default {
   },
   mounted() {
     this.rootNode = this.$d3.select('#tree-container')
+    this.svgRootNode = this.$d3.select('#svg-container')
     this.initSampleTree()
   }
 }
@@ -91,6 +89,14 @@ export default {
   margin: 40px;
   min-width: 300px;
   min-height: 300px;
+}
+
+#svg-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .tree-node {
