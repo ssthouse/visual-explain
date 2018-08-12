@@ -19,7 +19,7 @@ export default {
   methods: {},
   mounted() {
     const rootNode = constructTestData()
-    const dft = new Dft(rootNode, curVal => console.log(curVal))
+    const dft = new Dft(rootNode, null)
     dft.start()
   }
 }
