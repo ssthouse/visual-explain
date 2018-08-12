@@ -78,9 +78,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@ssthouse/personal-component-set@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@ssthouse/personal-component-set/-/personal-component-set-0.1.4.tgz#4968379dcfffa49bba8167aeeac09710a7b37348"
+"@ssthouse/personal-component-set@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@ssthouse/personal-component-set/-/personal-component-set-0.1.5.tgz#0f422edc23703f751165c3957b0b9c336d20055d"
   dependencies:
     less "^3.7.1"
     less-loader "^4.1.0"

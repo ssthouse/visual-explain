@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import DOMRender from '../components/dom-render/DomRender'
 import PatentSuit from '../components/mobile-patent-suit/PatentSuit'
-import Dft from '../components/depth-first-traversal/DFT'
+import DftExplain from '../components/depth-first-traversal/DftExplain'
 import Index from '../components/Index'
 
 Vue.use(Router)
@@ -31,7 +31,7 @@ export default new Router({
     {
       path: '/list/dft',
       name: 'dft',
-      component: Dft
+      component: DftExplain
     }
   ]
 })
