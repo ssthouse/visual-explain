@@ -23,11 +23,34 @@ export class Node {
   constructor(value, childrenNodes = []) {
     this.value = value
     this.childrenNodes = childrenNodes
+    this.id = guid()
   }
 
   addChild(childNode) {
     this.childrenNodes.push(childNode)
   }
+}
+
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1)
+  }
+  return (
+    s4() +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    s4() +
+    s4()
+  )
 }
 
 export function constructTestData() {

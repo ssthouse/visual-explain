@@ -1,9 +1,6 @@
 <template>
   <div>
     <tree-editor></tree-editor>
-    <v-card>
-      <v-card-title>Depth first traversal</v-card-title>
-    </v-card>
   </div>
 </template>
 <script>

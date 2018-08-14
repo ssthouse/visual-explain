@@ -1,22 +1,30 @@
 <template>
   <div id="tree-container" class="tree-container">
     <svg id='svg-container'></svg>
+    <template v-for="node in nodeList">
+      <node-editor :key="node.id" :node="node" :node-id="node.id" :node-width="nodeWidth">
+        {{node.id}}
+      </node-editor>
+    </template>
   </div>
 </template>
 
 <script>
 import { constructTestData } from './dft'
+import NodeEditor from './NodeEditor.vue'
 
 export default {
   name: 'treeEditor',
+  components: { 'node-editor': NodeEditor },
   data() {
     return {
       width: 300,
       height: 300,
-      nodeWidth: 40,
+      nodeWidth: 48,
       sampleTree: constructTestData(),
       rootNode: null,
-      svgRootNode: null
+      svgRootNode: null,
+      nodeList: []
     }
   },
   methods: {
@@ -28,8 +36,9 @@ export default {
 
       const treeGenerator = this.$d3.tree().size([this.width, this.height])
       const treeData = treeGenerator(hierarchyData)
-      this.drawNodes(treeData.descendants())
       this.drawLinks(treeData.links())
+
+      this.nodeList = treeData.descendants()
     },
     drawNodes(nodes) {
       const treeNodes = this.rootNode.selectAll('.tree-node').data(nodes)
@@ -97,12 +106,5 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-}
-
-.tree-node {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  background-color: aquamarine;
 }
 </style>
