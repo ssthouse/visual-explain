@@ -2,7 +2,7 @@
   <div id="tree-container" class="tree-container">
     <svg id='svg-container'></svg>
     <template v-for="node in nodeList">
-      <node-editor :key="node.id" :node="node" :node-id="node.id" :node-width="nodeWidth">
+      <node-editor @delete="onNodeDelete" @addChildNode="onChildNodeAdd" :key="node.id" :node="node" :node-id="node.id" :node-width="nodeWidth">
         {{node.id}}
       </node-editor>
     </template>
@@ -80,6 +80,12 @@ export default {
           return linkPath(d)
         })
       lines.exit().remove()
+    },
+    onNodeDelete(node) {
+      console.log(node)
+    },
+    onChildNodeAdd(newNode) {
+      console.log(newNode)
     }
   },
   mounted() {
