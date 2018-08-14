@@ -2,8 +2,7 @@
   <div id="tree-container" class="tree-container">
     <svg id='svg-container'></svg>
     <template v-for="node in nodeList">
-      <node-editor @delete="onNodeDelete" @addChildNode="onChildNodeAdd" :key="node.id" :node="node" :node-id="node.id" :node-width="nodeWidth">
-        {{node.id}}
+      <node-editor @delete="onNodeDelete" @addChildNode="onChildNodeAdd" :key="node.data.id" :node="node" :nodeId="node.data.id" :node-width="nodeWidth">
       </node-editor>
     </template>
   </div>
@@ -81,10 +80,12 @@ export default {
         })
       lines.exit().remove()
     },
-    onNodeDelete(node) {
-      console.log(node)
+    onNodeDelete(nodeId) {
+      console.log(nodeId)
+      this.nodeList = this.nodeList.filter(node => node.data.id !== nodeId)
     },
-    onChildNodeAdd(newNode) {
+    onChildNodeAdd(curNode, newNode) {
+      console.log(curNode)
       console.log(newNode)
     }
   },

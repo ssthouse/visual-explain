@@ -3,7 +3,11 @@
       width: nodeWidth+'px', height: nodeWidth + 'px'}" @mouseover="onHover" @mouseout="onHoverOut">
     <span>{{node.value}}</span>
     <div :class="{'control-panel' : true, 'hidden': !showControlPanel}">
-      <button class="delete-btn">delete</button>
+      <button class="delete-btn" @click="onDelete">delete</button>
+      <div class="add-child-panel">
+        <input placeholder="child value" v-model="childNodeValue" />
+        <button @click="onAddChildNode">add child</button>
+      </div>
     </div>
   </div>
 </template>
@@ -15,7 +19,8 @@ export default {
   props: ['node', 'nodeId', 'nodeWidth'],
   data() {
     return {
-      showControlPanel: false
+      showControlPanel: false,
+      childNodeValue: 0
     }
   },
   methods: {
@@ -23,8 +28,8 @@ export default {
       this.$emit('delete', this.nodeId)
     },
     onAddChildNode() {
-      const childNode = new Node(1)
-      this.$emit('addChildNode', childNode)
+      const childNode = new Node(this.childNodeValue)
+      this.$emit('addChildNode', this.node, childNode)
     },
     onHover() {
       this.showControlPanel = true
@@ -49,9 +54,10 @@ export default {
   position: absolute;
 
   .control-panel {
-    width: 100%;
     height: 100%;
     position: absolute;
+    margin-left: -100px;
+    margin-right: -100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,7 +65,22 @@ export default {
     top: 0;
 
     .delete-btn {
-      margin-left: -100px;
+      width: 100px;
+      justify-self: flex-start;
+    }
+
+    .add-child-panel {
+      background-color: aquamarine;
+      width: 100px;
+      margin-left: 48px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      align-self: flex-end;
+
+      input {
+        width: 100px;
+      }
     }
   }
 }
