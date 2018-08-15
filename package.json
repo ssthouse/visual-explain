@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ssthouse/personal-component-set": "^0.1.5",
+    "codemirror": "^5.39.2",
     "d3": "^5.0.0",
     "less": "^3.5.1",
     "less-loader": "^4.1.0",
