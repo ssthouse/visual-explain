@@ -32,7 +32,7 @@ export default {
       this.$emit('addChildNode', this.node, childNode)
     },
     onHover() {
-      this.showControlPanel = true
+      // this.showControlPanel = true
     },
     onHoverOut() {
       this.showControlPanel = false
