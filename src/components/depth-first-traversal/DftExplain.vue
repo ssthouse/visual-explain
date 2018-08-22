@@ -1,7 +1,7 @@
 <template>
   <div>
-    <tree-editor></tree-editor>
     <textarea ref="treeJsonCode" v-model="treeJsonCode"></textarea>
+    <div id="tree-viz"></div>
   </div>
 </template>
 <script>
@@ -10,6 +10,7 @@ import TreeEditor from './TreeEditor.vue'
 import CodeMirror from 'codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript.js'
+import TreeViz from './tree-viz'
 
 export default {
   name: 'DftExplain',
@@ -32,6 +33,9 @@ export default {
     const dft = new Dft(rootNode, null)
     dft.start()
     this.testCodeMirror()
+
+    const treeViz = new TreeViz(rootNode, 'tree-viz')
+    treeViz.updateView()
   }
 }
 </script>
@@ -40,5 +44,10 @@ export default {
   text-align: left !important;
   padding: 16px;
   font-family: 'Courier New', Courier, monospace;
+}
+
+#tree-viz {
+  width: 100px;
+  height: 100px;
 }
 </style>

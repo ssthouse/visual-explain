@@ -12,12 +12,26 @@ class TreeViz {
   }
 
   _initDom() {
-    const svgDom = document.createElement('svg')
-    svgDom.setAttribute('width', '100%')
-    svgDom.setAttribute('height', '100%')
-    const container = document.getElementById(this.domId)
-    container.appendChild(svgDom)
-    this.svgDom = svgDom
+    // const svgDom = document.createElement('svg')
+    // svgDom.setAttribute('width', '100%')
+    // svgDom.setAttribute('height', '100%')
+    // svgDom.setAttribute('id', 'tree-viz')
+    // const container = document.getElementById(this.domId)
+    // container.appendChild(svgDom)
+    // this.svgDom = d3
+    //   .select('svg#tree-viz')
+    //   .style('width', '100px')
+    //   .style('height', '100px')
+    this.svgDom = d3.select('#' + this.domId).append('svg')
+  }
+
+  getWidth() {
+    // TODO return this.svgDom.attr('width').substring()
+    return 100
+  }
+
+  getHeight() {
+    return 100
   }
 
   rootNode(rootNode) {
@@ -47,7 +61,7 @@ class TreeViz {
 
   _recalcLayout() {
     const hierarchyData = d3.hierarchy(this.rootNode, d => d.childrenNodes)
-    const treeGenerator = d3.tree().size([this.width, this.height])
+    const treeGenerator = d3.tree().size([this.getWidth(), this.getHeight()])
     const treeData = treeGenerator(hierarchyData)
     this.nodeList = treeData.descendants()
     this.links = treeData.links()
@@ -60,12 +74,13 @@ class TreeViz {
     const treeNodes = this.svgDom.selectAll('.tree-node').data(this.nodeList)
     treeNodes
       .enter()
-      .append('div')
+      .append('circle')
       .merge(treeNodes)
       .attr('title', d => d.value)
-      .attr('class', 'tree-node')
-      .style('left', d => d.x + 'px')
-      .style('top', d => d.y + 'px')
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y)
+      .attr('r', 5)
+      .attr('stroke', 'black')
     treeNodes.exit().remove()
   }
 
@@ -74,7 +89,6 @@ class TreeViz {
       return
     }
     const lines = this.svgDom.selectAll('.link').data(this.links)
-    const self = this
     lines
       .enter()
       .append('path')
@@ -86,10 +100,10 @@ class TreeViz {
         let linkPath = d3
           .linkVertical()
           .x(function(d) {
-            return d.x + self.nodeWidth / 2
+            return d.x
           })
           .y(function(d) {
-            return d.y + (2 * self.nodeWidth) / 3
+            return d.y
           })
           .source(function(d) {
             return { x: d.source.x, y: d.source.y }
