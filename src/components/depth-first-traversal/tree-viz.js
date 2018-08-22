@@ -2,10 +2,22 @@
 import * as d3 from 'd3'
 
 class TreeViz {
-  constructor(rootNode) {
+  constructor(rootNode, domId) {
     this.rootNode = rootNode
+    this.domId = domId
     this.nodeList = null
     this.links = null
+    this.svgDom = null
+    this._initDom()
+  }
+
+  _initDom() {
+    const svgDom = document.createElement('svg')
+    svgDom.setAttribute('width', '100%')
+    svgDom.setAttribute('height', '100%')
+    const container = document.getElementById(this.domId)
+    container.appendChild(svgDom)
+    this.svgDom = svgDom
   }
 
   rootNode(rootNode) {
@@ -28,20 +40,24 @@ class TreeViz {
   }
 
   updateView() {
-    const hierarchyData = this.$d3.hierarchy(
-      this.sampleTree,
-      d => d.childrenNodes
-    )
+    this._recalcLayout()
+    this._drawLinks()
+    this._drawNodes()
+  }
 
-    const treeGenerator = this.$d3.tree().size([this.width, this.height])
+  _recalcLayout() {
+    const hierarchyData = d3.hierarchy(this.rootNode, d => d.childrenNodes)
+    const treeGenerator = d3.tree().size([this.width, this.height])
     const treeData = treeGenerator(hierarchyData)
-    this.drawLinks(treeData.links())
-
     this.nodeList = treeData.descendants()
+    this.links = treeData.links()
   }
 
   _drawNodes() {
-    const treeNodes = this.rootNode.selectAll('.tree-node').data(nodes)
+    if (!this.nodeList) {
+      return
+    }
+    const treeNodes = this.svgDom.selectAll('.tree-node').data(this.nodeList)
     treeNodes
       .enter()
       .append('div')
@@ -54,7 +70,10 @@ class TreeViz {
   }
 
   _drawLinks() {
-    const lines = this.svgRootNode.selectAll('.link').data(links)
+    if (!this.links) {
+      return
+    }
+    const lines = this.svgDom.selectAll('.link').data(this.links)
     const self = this
     lines
       .enter()
@@ -64,13 +83,13 @@ class TreeViz {
       .attr('stroke', 'black')
       .merge(lines)
       .attr('d', function(d, i) {
-        let linkPath = self.$d3
+        let linkPath = d3
           .linkVertical()
           .x(function(d) {
             return d.x + self.nodeWidth / 2
           })
           .y(function(d) {
-            return d.y + 2 * self.nodeWidth / 3
+            return d.y + (2 * self.nodeWidth) / 3
           })
           .source(function(d) {
             return { x: d.source.x, y: d.source.y }
