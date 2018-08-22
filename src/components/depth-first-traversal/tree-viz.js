@@ -25,6 +25,11 @@ class TreeViz {
     this.svgDom = d3.select('#' + this.domId).append('svg')
   }
 
+  start() {
+    this._recalcLayout()
+    this.updateView()
+  }
+
   getWidth() {
     // TODO return this.svgDom.attr('width').substring()
     return 100
@@ -51,10 +56,10 @@ class TreeViz {
         stack.push(element)
       })
     }
+    this.updateView()
   }
 
   updateView() {
-    this._recalcLayout()
     this._drawLinks()
     this._drawNodes()
   }
@@ -80,7 +85,14 @@ class TreeViz {
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
       .attr('r', 5)
-      .attr('stroke', 'black')
+      .attr('stroke', d => {
+        console.log('data')
+        console.log(d)
+        if (d.data['highlight']) {
+          return 'red'
+        }
+        return 'black'
+      })
     treeNodes.exit().remove()
   }
 
@@ -117,6 +129,7 @@ class TreeViz {
   }
 
   hightlightNode(node) {
+    console.log(node)
     node['highlight'] = true
   }
 }

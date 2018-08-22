@@ -2,6 +2,7 @@
   <div>
     <textarea ref="treeJsonCode" v-model="treeJsonCode"></textarea>
     <div id="tree-viz"></div>
+    <button @click='dft'>dft</button>
   </div>
 </template>
 <script>
@@ -26,6 +27,9 @@ export default {
       this.codeMirror = CodeMirror.fromTextArea(this.$refs.treeJsonCode, {
         mode: 'javascript'
       })
+    },
+    dft() {
+      this.treeViz.dft()
     }
   },
   mounted() {
@@ -34,8 +38,8 @@ export default {
     dft.start()
     this.testCodeMirror()
 
-    const treeViz = new TreeViz(rootNode, 'tree-viz')
-    treeViz.updateView()
+    this.treeViz = new TreeViz(rootNode, 'tree-viz')
+    this.treeViz.start()
   }
 }
 </script>
