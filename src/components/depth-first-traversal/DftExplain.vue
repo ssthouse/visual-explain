@@ -51,7 +51,7 @@ export default {
 }
 
 #tree-viz {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
 }
 </style>

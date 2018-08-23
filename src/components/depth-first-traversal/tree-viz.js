@@ -8,29 +8,39 @@ class TreeViz {
     this.nodeList = null
     this.links = null
     this.svgDom = null
+    this.g = null
     this._initDom()
+    this.refreshTimer = null
   }
 
   _initDom() {
+    this.nodeSize = 10
+    this.padding = 20
     this.svgDom = d3
       .select('#' + this.domId)
       .append('svg')
       .style('width', '100%')
       .style('height', '100%')
+
+    this.g = this.svgDom
+      .append('g')
+      .attr('transform', `translate(${this.padding}, ${this.padding})`)
   }
 
   start() {
     this._recalcLayout()
-    this.updateView()
+    const self = this
+    this.refreshTimer = d3.timer(function() {
+      self.updateView()
+    }, 150)
   }
 
   getWidth() {
-    console.log(this.svgDom)
-    return this.svgDom.node().getBoundingClientRect().width
+    return this.svgDom.node().getBoundingClientRect().width - this.padding * 2
   }
 
   getHeight() {
-    return this.svgDom.node().getBoundingClientRect().height
+    return this.svgDom.node().getBoundingClientRect().height - this.padding * 2
   }
 
   rootNode(rootNode) {
@@ -53,9 +63,12 @@ class TreeViz {
         stack.push(element)
       })
       this.hightlightNode(curNode)
-      this.updateView()
       setTimeout(() => this.dftLoop(stack), 1000)
     }
+  }
+
+  hightlightNode(node) {
+    node['highlight'] = true
   }
 
   updateView() {
@@ -75,7 +88,7 @@ class TreeViz {
     if (!this.nodeList) {
       return
     }
-    const treeNodes = this.svgDom.selectAll('.tree-node').data(this.nodeList)
+    const treeNodes = this.g.selectAll('circle').data(this.nodeList)
     treeNodes
       .enter()
       .append('circle')
@@ -83,24 +96,35 @@ class TreeViz {
       .attr('title', d => d.value)
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
-      .attr('r', 5)
+      .attr('r', this.nodeSize)
       .attr('stroke', 'transparent')
       .attr('fill', d => {
-        console.log('data')
-        console.log(d)
         if (d.data['highlight']) {
           return 'red'
         }
         return 'black'
       })
     treeNodes.exit().remove()
+
+    const texts = this.g.selectAll('text').data(this.nodeList)
+    texts
+      .enter()
+      .append('text')
+      .merge(texts)
+      .text(d => d.data.value)
+      .attr('x', d => d.x)
+      .attr('y', d => d.y)
+      .attr('text-anchor', 'middle')
+      .attr('dy', '0.35em')
+      .attr('fill', 'white')
+    texts.exit().remove()
   }
 
   _drawLinks() {
     if (!this.links) {
       return
     }
-    const lines = this.svgDom.selectAll('.link').data(this.links)
+    const lines = this.g.selectAll('.link').data(this.links)
     lines
       .enter()
       .append('path')
@@ -126,11 +150,6 @@ class TreeViz {
         return linkPath(d)
       })
     lines.exit().remove()
-  }
-
-  hightlightNode(node) {
-    console.log(node)
-    node['highlight'] = true
   }
 }
 
