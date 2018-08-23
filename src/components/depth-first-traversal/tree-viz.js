@@ -1,4 +1,4 @@
-// import { guid } from './util'
+import * as util from './util'
 import * as d3 from 'd3'
 
 class TreeViz {
@@ -12,17 +12,11 @@ class TreeViz {
   }
 
   _initDom() {
-    // const svgDom = document.createElement('svg')
-    // svgDom.setAttribute('width', '100%')
-    // svgDom.setAttribute('height', '100%')
-    // svgDom.setAttribute('id', 'tree-viz')
-    // const container = document.getElementById(this.domId)
-    // container.appendChild(svgDom)
-    // this.svgDom = d3
-    //   .select('svg#tree-viz')
-    //   .style('width', '100px')
-    //   .style('height', '100px')
-    this.svgDom = d3.select('#' + this.domId).append('svg')
+    this.svgDom = d3
+      .select('#' + this.domId)
+      .append('svg')
+      .style('width', '100%')
+      .style('height', '100%')
   }
 
   start() {
@@ -31,12 +25,12 @@ class TreeViz {
   }
 
   getWidth() {
-    // TODO return this.svgDom.attr('width').substring()
-    return 100
+    console.log(this.svgDom)
+    return this.svgDom.node().getBoundingClientRect().width
   }
 
   getHeight() {
-    return 100
+    return this.svgDom.node().getBoundingClientRect().height
   }
 
   rootNode(rootNode) {
@@ -49,14 +43,19 @@ class TreeViz {
 
   dft() {
     const stack = [this.rootNode]
-    while (stack.length !== 0) {
+    this.dftLoop(stack)
+  }
+
+  dftLoop(stack) {
+    if (stack.length !== 0) {
       const curNode = stack.pop()
-      this.hightlightNode(curNode)
       curNode.childrenNodes.forEach(element => {
         stack.push(element)
       })
+      this.hightlightNode(curNode)
+      this.updateView()
+      setTimeout(() => this.dftLoop(stack), 1000)
     }
-    this.updateView()
   }
 
   updateView() {
@@ -85,7 +84,8 @@ class TreeViz {
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
       .attr('r', 5)
-      .attr('stroke', d => {
+      .attr('stroke', 'transparent')
+      .attr('fill', d => {
         console.log('data')
         console.log(d)
         if (d.data['highlight']) {
