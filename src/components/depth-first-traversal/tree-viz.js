@@ -35,6 +35,10 @@ class TreeViz {
     }, 150)
   }
 
+  stop() {
+    this.refreshTimer.stop()
+  }
+
   getWidth() {
     return this.svgDom.node().getBoundingClientRect().width - this.padding * 2
   }

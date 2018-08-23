@@ -2,7 +2,8 @@
   <div>
     <textarea ref="treeJsonCode" v-model="treeJsonCode"></textarea>
     <div id="tree-viz"></div>
-    <button @click='dft'>dft</button>
+    <button @click='dft'>dft start</button>
+    <button @click='dftStop'>dft stop</button>
   </div>
 </template>
 <script>
@@ -30,6 +31,9 @@ export default {
     },
     dft() {
       this.treeViz.dft()
+    },
+    dftStop() {
+      this.treeViz.stop()
     }
   },
   mounted() {
