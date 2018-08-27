@@ -1,5 +1,9 @@
 <template>
-  <div id='array-viz'></div>
+  <div>
+    <div id='array-viz'></div>
+    <button @click='push'>push</button>
+    <button @click='pop'>pop</button>
+  </div>
 </template>
 
 <script>
@@ -9,6 +13,14 @@ export default {
   data() {
     return {
       arrayViz: null
+    }
+  },
+  methods: {
+    push() {
+      this.arrayViz.push(parseInt((Math.random() * 10)))
+    },
+    pop() {
+      this.arrayViz.pop()
     }
   },
   mounted() {

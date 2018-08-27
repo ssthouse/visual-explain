@@ -19,6 +19,10 @@ class ArrayViz {
     this.array.push(...newItem)
   }
 
+  pop() {
+    return this.array.pop()
+  }
+
   _initAttr() {
     this.padding = 20
     this.blockSize = 60
@@ -67,6 +71,7 @@ class ArrayViz {
       .attr('height', this.blockSize)
       .attr('fill', 'darkgray')
       .attr('stroke', 'white')
+    blocks.exit().remove()
 
     const texts = this.g.selectAll('text').data(this.array)
     texts
@@ -78,6 +83,7 @@ class ArrayViz {
       .attr('fill', 'black')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
+    texts.exit().remove()
   }
 }
 
