@@ -4,6 +4,7 @@
     <div id="tree-viz"></div>
     <button @click='dft'>dft start</button>
     <button @click='dftStop'>dft stop</button>
+    <array-viz></array-viz>
   </div>
 </template>
 <script>
@@ -13,10 +14,12 @@ import CodeMirror from 'codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript.js'
 import TreeViz from './tree-viz'
+// import ArrayViz from './array-visual'
+import ArrayViz from './ArrayViz'
 
 export default {
   name: 'DftExplain',
-  components: { 'tree-editor': TreeEditor },
+  components: { 'tree-editor': TreeEditor, 'array-viz': ArrayViz },
   data() {
     return {
       treeJsonCode: '{value: 1, childNodes : []}',
@@ -44,6 +47,8 @@ export default {
 
     this.treeViz = new TreeViz(rootNode, 'tree-viz')
     this.treeViz.start()
+    // const arrayViz = new ArrayViz(1, 2, 2)
+    // console.log(arrayViz)
   }
 }
 </script>
