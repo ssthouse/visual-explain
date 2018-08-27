@@ -21,10 +21,11 @@ class ArrayViz {
 
   _initAttr() {
     this.padding = 20
+    this.blockSize = 60
     this.xScale = d3
       .scaleLinear()
       .domain([0, this.array.length])
-      .range([0, this.width])
+      .range([0, this.array.length * this.blockSize])
   }
 
   _initDom() {
@@ -56,13 +57,27 @@ class ArrayViz {
 
   updateView() {
     this._initAttr()
+    const blocks = this.g.selectAll('rect').data(this.array)
+    blocks
+      .enter()
+      .append('rect')
+      .attr('x', (d, i) => this.xScale(i))
+      .attr('y', this.height / 2)
+      .attr('width', this.blockSize)
+      .attr('height', this.blockSize)
+      .attr('fill', 'darkgray')
+      .attr('stroke', 'white')
+
     const texts = this.g.selectAll('text').data(this.array)
     texts
       .enter()
       .append('text')
       .text(d => d)
-      .attr('x', (d, i) => this.xScale(i))
-      .attr('y', this.height / 2)
+      .attr('x', (d, i) => this.xScale(i) + this.blockSize / 2)
+      .attr('y', this.height / 2 + this.blockSize / 2)
+      .attr('fill', 'black')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '0.35em')
   }
 }
 

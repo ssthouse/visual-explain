@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ArrayViz from './array-visual.js'
+import ArrayViz from './array-viz.js'
 
 export default {
   data() {
