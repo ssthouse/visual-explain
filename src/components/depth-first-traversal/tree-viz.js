@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import * as Util from './util'
 
 class TreeViz {
   constructor(rootNode, domId) {
@@ -9,6 +10,27 @@ class TreeViz {
     this.svgDom = null
     this.g = null
     this.refreshTimer = null
+    this.addNodeId()
+  }
+
+  rootNode(node) {
+    if (node) {
+      this.rootNode = node
+      this.addNodeId()
+      return this
+    }
+    return this.rootNode
+  }
+
+  addNodeId() {
+    const stack = [this.rootNode]
+    while (stack.length !== 0) {
+      const curNode = stack.pop()
+      curNode['id'] = Util.guid()
+      curNode.childrenNodes.forEach(element => {
+        stack.push(element)
+      })
+    }
   }
 
   domId(id) {
@@ -48,7 +70,10 @@ class TreeViz {
       return
     }
     this.nodeSize = 24
-    this.padding = 24
+    this.padding = 40
+    d3.select('#' + this.domId)
+      .selectAll('*')
+      .remove()
     this.svgDom = d3
       .select('#' + this.domId)
       .append('svg')
@@ -72,14 +97,6 @@ class TreeViz {
 
   getHeight() {
     return this.svgDom.node().getBoundingClientRect().height - this.padding * 2
-  }
-
-  rootNode(rootNode) {
-    if (arguments.length) {
-      this.rootNode = rootNode
-      return this
-    }
-    return this.rootNode
   }
 
   dft() {
@@ -136,7 +153,7 @@ class TreeViz {
         if (d.data['highlight']) {
           return 'red'
         }
-        return 'black'
+        return '#2196f3'
       })
     treeNodes.exit().remove()
 

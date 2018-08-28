@@ -4,7 +4,7 @@ class ArrayViz {
     this.array = array
     this.transition = d3
       .transition()
-      .duration(500)
+      .duration(600)
       .ease(d3.easeLinear)
   }
 
@@ -70,6 +70,7 @@ class ArrayViz {
 
   _initDom() {
     const domContainer = d3.select('#' + this.domId)
+    domContainer.selectAll('*').remove()
     this.svg = domContainer
       .append('svg')
       .attr('width', '100%')
@@ -102,7 +103,7 @@ class ArrayViz {
       .attr('y', (d, i) => this.height - this.yScale(i) - this.blockSize)
       .attr('width', this.blockSize)
       .attr('height', this.blockSize)
-      .attr('fill', 'green')
+      .attr('fill', 'darkgray')
       .attr('stroke', 'white')
     blocks
       .transition(this.transition)
@@ -110,12 +111,11 @@ class ArrayViz {
       .attr('y', (d, i) => this.height - this.yScale(i) - this.blockSize)
       .attr('width', this.blockSize)
       .attr('height', this.blockSize)
-      .attr('fill', 'darkgray')
       .attr('stroke', 'white')
     blocks
       .exit()
-      .attr('fill', 'red')
       .transition(this.transition)
+      .attr('fill', 'red')
       .attr('y', (d, i) => this.height - this.yScale(i) - this.blockSize)
       .style('opacity', 0)
       .remove()

@@ -21,7 +21,6 @@
   </div>
 </template>
 <script>
-import { constructTestData, Dft } from './dft'
 import TreeEditor from './TreeEditor.vue'
 import CodeMirror from 'codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -91,43 +90,35 @@ export default {
     return {
       treeJsonCode,
       dftCode,
-      codeMirror: null,
+      jsonCodeMirror: null,
       dftCodeMirror: null,
       arrayViz: null,
       treeViz: null
     }
   },
   methods: {
-    testCodeMirror() {
-      this.codeMirror = CodeMirror.fromTextArea(this.$refs.treeJsonCode, {
+    initCodeMirror() {
+      this.jsonCodeMirror = CodeMirror.fromTextArea(this.$refs.treeJsonCode, {
         mode: 'javascript',
         lineNumbers: true
       })
       this.dftCodeMirror = CodeMirror.fromTextArea(this.$refs.dftCode, {
         mode: 'javascript',
-        lineNumbers: true
+        lineNumbers: true,
+        readOnly: true
       })
     },
     startDft() {
-      if (this.treeViz) {
-        this.arrayViz.empty()
-        this.treeViz.empty()
-        this.treeViz.dft()
-      } else {
-        const rootNode = constructTestData()
-        this.treeViz = new TreeViz(rootNode, 'tree-viz')
-        this.treeViz.start()
-        this.arrayViz = new ArrayViz([]).domId('array-viz').toText(d => d.value)
-        this.arrayViz.start()
-        this.treeViz.stack(this.arrayViz).dft()
-      }
-    },
-    dftStop() {
-      this.treeViz.stop()
+      const rootNode = JSON.parse(this.jsonCodeMirror.getValue())
+      this.treeViz = new TreeViz(rootNode, 'tree-viz')
+      this.treeViz.start()
+      this.arrayViz = new ArrayViz([]).domId('array-viz').toText(d => d.value)
+      this.arrayViz.start()
+      this.treeViz.stack(this.arrayViz).dft()
     }
   },
   mounted() {
-    this.testCodeMirror()
+    this.initCodeMirror()
   }
 }
 </script>
@@ -138,6 +129,13 @@ export default {
   width: 100%;
   height: 100%;
 
+  #update-action-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 100;
+  }
+
   .left-panel {
     width: 50vw;
     height: 100%;
@@ -145,6 +143,7 @@ export default {
     flex-direction: column;
 
     > div {
+      position: relative;
       width: 100%;
       height: 50%;
 
