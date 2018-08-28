@@ -17,10 +17,16 @@ class ArrayViz {
    */
   push(...newItem) {
     this.array.push(...newItem)
+    return this
   }
 
   pop() {
     return this.array.pop()
+  }
+
+  empty() {
+    this.array = []
+    return this
   }
 
   _initAttr() {
