@@ -29,14 +29,6 @@ class ArrayViz {
     )
   }
 
-  vertical(isVertical) {
-    if (isVertical) {
-      this.vertical = isVertical
-      return this
-    }
-    return this.isVertical
-  }
-
   push(newItem) {
     this.array.push(newItem)
     this.updateView()
@@ -102,41 +94,25 @@ class ArrayViz {
       .enter()
       .append('rect')
       .transition(this.transition)
-      .attr(
-        'x',
-        (d, i) =>
-          this.vertical ? this.width / 2 - this.blockSize / 2 : this.xScale(i)
-      )
-      .attr(
-        'y',
-        (d, i) =>
-          this.vertical ? this.height - this.yScale(i) : this.height / 2
-      )
+      .attr('x', d => this.width / 2 - this.blockSize / 2)
+      .attr('y', (d, i) => this.height - this.yScale(i))
       .attr('width', this.blockSize)
       .attr('height', this.blockSize)
       .attr('fill', 'green')
       .attr('stroke', 'white')
     blocks
       .transition(this.transition)
-      .attr(
-        'x',
-        (d, i) =>
-          this.vertical ? this.width / 2 - this.blockSize / 2 : this.xScale(i)
-      )
-      .attr(
-        'y',
-        (d, i) =>
-          this.vertical ? this.height - this.yScale(i) : this.height / 2
-      )
+      .attr('x', d => this.width / 2 - this.blockSize / 2)
+      .attr('y', (d, i) => this.height - this.yScale(i))
       .attr('width', this.blockSize)
       .attr('height', this.blockSize)
       .attr('fill', 'darkgray')
       .attr('stroke', 'white')
-
     blocks
       .exit()
       .attr('fill', 'red')
       .transition(this.transition)
+      .attr('y', (d, i) => this.height - this.yScale(i) - this.blockSize)
       .style('opacity', 0)
       .remove()
 
@@ -146,34 +122,16 @@ class ArrayViz {
       .append('text')
       .text(d => this.toTextAccess(d))
       .transition(this.transition)
-      .attr(
-        'x',
-        (d, i) =>
-          this.vertical ? this.width / 2 : this.xScale(i) + this.blockSize / 2
-      )
-      .attr(
-        'y',
-        (d, i) =>
-          (this.vertical ? this.height - this.yScale(i) : this.height / 2) +
-          this.blockSize / 2
-      )
+      .attr('x', d => this.width / 2)
+      .attr('y', (d, i) => this.height - this.yScale(i) + this.blockSize / 2)
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
       .attr('fill', 'white')
     texts
       .text(d => this.toTextAccess(d))
       .transition(this.transition)
-      .attr(
-        'x',
-        (d, i) =>
-          this.vertical ? this.width / 2 : this.xScale(i) + this.blockSize / 2
-      )
-      .attr(
-        'y',
-        (d, i) =>
-          (this.vertical ? this.height - this.yScale(i) : this.height / 2) +
-          this.blockSize / 2
-      )
+      .attr('x', d => this.width / 2)
+      .attr('y', (d, i) => this.height - this.yScale(i) + this.blockSize / 2)
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
     texts

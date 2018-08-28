@@ -109,7 +109,6 @@ export default {
     startDft() {
       const arrayViz = new ArrayViz([])
         .domId('array-viz')
-        .vertical(true)
         .toText(d => d.value)
       arrayViz.start()
       this.treeViz.stack(arrayViz).dft()
