@@ -19,12 +19,8 @@ class TreeViz {
     return this.domId
   }
 
-  nodeSize(size) {
-    if (size) {
-      this.nodeSize = size
-      return this
-    }
-    return this.nodeSize
+  nodeSize() {
+    return this.nodeSize || this.getWidth() / 8
   }
 
   stack(stack) {
@@ -35,12 +31,24 @@ class TreeViz {
     return this.stack
   }
 
+  empty() {
+    const stack = [this.rootNode]
+    while (stack.length !== 0) {
+      const curNode = stack.pop()
+      curNode['highlight'] = false
+      curNode.childrenNodes.forEach(element => {
+        stack.push(element)
+      })
+    }
+    this.updateView()
+  }
+
   _initDom() {
     if (!this.domId) {
       return
     }
-    this.nodeSize = 10
-    this.padding = 20
+    this.nodeSize = 24
+    this.padding = 24
     this.svgDom = d3
       .select('#' + this.domId)
       .append('svg')
@@ -55,14 +63,7 @@ class TreeViz {
   start() {
     this._initDom()
     this._recalcLayout()
-    const self = this
-    this.refreshTimer = d3.timer(function() {
-      self.updateView()
-    }, 150)
-  }
-
-  stop() {
-    this.refreshTimer.stop()
+    this.updateView()
   }
 
   getWidth() {
@@ -93,9 +94,7 @@ class TreeViz {
       const curNode = this.stack.pop()
       this.hightlightNode(curNode)
       setTimeout(() => {
-        curNode.childrenNodes.forEach(element => {
-          this.stack.push(element)
-        })
+        this.stack.push(curNode.childrenNodes)
         setTimeout(() => this.dftLoop(), 1000)
       }, 1000)
     }
@@ -103,6 +102,7 @@ class TreeViz {
 
   hightlightNode(node) {
     node['highlight'] = true
+    this.updateView()
   }
 
   updateView() {

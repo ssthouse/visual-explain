@@ -92,7 +92,9 @@ export default {
       treeJsonCode,
       dftCode,
       codeMirror: null,
-      dftCodeMirror: null
+      dftCodeMirror: null,
+      arrayViz: null,
+      treeViz: null
     }
   },
   methods: {
@@ -107,26 +109,25 @@ export default {
       })
     },
     startDft() {
-      const arrayViz = new ArrayViz([])
-        .domId('array-viz')
-        .toText(d => d.value)
-      arrayViz.start()
-      this.treeViz.stack(arrayViz).dft()
+      if (this.treeViz) {
+        this.arrayViz.empty()
+        this.treeViz.empty()
+        this.treeViz.dft()
+      } else {
+        const rootNode = constructTestData()
+        this.treeViz = new TreeViz(rootNode, 'tree-viz')
+        this.treeViz.start()
+        this.arrayViz = new ArrayViz([]).domId('array-viz').toText(d => d.value)
+        this.arrayViz.start()
+        this.treeViz.stack(this.arrayViz).dft()
+      }
     },
     dftStop() {
       this.treeViz.stop()
     }
   },
   mounted() {
-    const rootNode = constructTestData()
-    const dft = new Dft(rootNode, null)
-    dft.start()
     this.testCodeMirror()
-
-    this.treeViz = new TreeViz(rootNode, 'tree-viz')
-    this.treeViz.start()
-    // const arrayViz = new ArrayViz(1, 2, 2)
-    // console.log(arrayViz)
   }
 }
 </script>

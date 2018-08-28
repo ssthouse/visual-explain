@@ -30,7 +30,11 @@ class ArrayViz {
   }
 
   push(newItem) {
-    this.array.push(newItem)
+    if (newItem instanceof Array) {
+      this.array.push(...newItem)
+    } else {
+      this.array.push(newItem)
+    }
     this.updateView()
     return this
   }
@@ -52,7 +56,7 @@ class ArrayViz {
   }
 
   _initAttr() {
-    this.padding = 20
+    this.padding = 10
     this.blockSize = 60
     this.xScale = d3
       .scaleLinear()
@@ -95,7 +99,7 @@ class ArrayViz {
       .append('rect')
       .transition(this.transition)
       .attr('x', d => this.width / 2 - this.blockSize / 2)
-      .attr('y', (d, i) => this.height - this.yScale(i))
+      .attr('y', (d, i) => this.height - this.yScale(i) - this.blockSize)
       .attr('width', this.blockSize)
       .attr('height', this.blockSize)
       .attr('fill', 'green')
@@ -103,7 +107,7 @@ class ArrayViz {
     blocks
       .transition(this.transition)
       .attr('x', d => this.width / 2 - this.blockSize / 2)
-      .attr('y', (d, i) => this.height - this.yScale(i))
+      .attr('y', (d, i) => this.height - this.yScale(i) - this.blockSize)
       .attr('width', this.blockSize)
       .attr('height', this.blockSize)
       .attr('fill', 'darkgray')
@@ -123,7 +127,7 @@ class ArrayViz {
       .text(d => this.toTextAccess(d))
       .transition(this.transition)
       .attr('x', d => this.width / 2)
-      .attr('y', (d, i) => this.height - this.yScale(i) + this.blockSize / 2)
+      .attr('y', (d, i) => this.height - this.yScale(i) - this.blockSize / 2)
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
       .attr('fill', 'white')
@@ -131,7 +135,7 @@ class ArrayViz {
       .text(d => this.toTextAccess(d))
       .transition(this.transition)
       .attr('x', d => this.width / 2)
-      .attr('y', (d, i) => this.height - this.yScale(i) + this.blockSize / 2)
+      .attr('y', (d, i) => this.height - this.yScale(i) - this.blockSize / 2)
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
     texts
