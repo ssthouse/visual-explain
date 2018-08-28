@@ -1,6 +1,13 @@
 <template>
+  <div class="dft-container">
+    <div class="left-panel">
   <div>
     <textarea ref="treeJsonCode" v-model="treeJsonCode"></textarea>
+      </div>
+      <div>
+        <textarea ref="dftCode" v-model="dftCode"></textarea>
+      </div>
+    </div>
     <div id="tree-viz"></div>
     <button @click='dft'>dft start</button>
     <button @click='dftStop'>dft stop</button>
@@ -17,19 +24,80 @@ import TreeViz from './tree-viz'
 // import ArrayViz from './array-visual'
 import ArrayViz from './ArrayViz'
 
+const dftCode = `export class Dft {
+  constructor(rootNode, stepCallback) {
+    this.rootNode = rootNode
+    this.stepCallback = stepCallback
+  }
+
+  start() {
+    if (!this.rootNode || !this.stepCallback) {
+      return
+    }
+    const stack = [this.rootNode]
+    while (stack.length !== 0) {
+      const curNode = stack.pop()
+      this.stepCallback(curNode)
+      curNode.childrenNodes.forEach(element => {
+        stack.push(element)
+      })
+    }
+  }
+}`
+
+const treeJsonCode = `{
+  "value": 1,
+  "childrenNodes": [
+    {
+      "value": 2,
+      "childrenNodes": [
+        {
+          "value": 4,
+          "childrenNodes": []
+        },
+        {
+          "value": 5,
+          "childrenNodes": []
+        }
+      ]
+    },
+    {
+      "value": 3,
+      "childrenNodes": [
+        {
+          "value": 6,
+          "childrenNodes": []
+        },
+        {
+          "value": 7,
+          "childrenNodes": []
+        }
+      ]
+    }
+  ]
+}
+`
+
 export default {
   name: 'DftExplain',
   components: { 'tree-editor': TreeEditor, 'array-viz': ArrayViz },
   data() {
     return {
-      treeJsonCode: '{value: 1, childNodes : []}',
-      codeMirror: null
+      treeJsonCode,
+      dftCode,
+      codeMirror: null,
+      dftCodeMirror: null
     }
   },
   methods: {
     testCodeMirror() {
       this.codeMirror = CodeMirror.fromTextArea(this.$refs.treeJsonCode, {
-        mode: 'javascript'
+        mode: 'javascript',
+        lineNumbers: true
+      })
+      this.dftCodeMirror = CodeMirror.fromTextArea(this.$refs.dftCode, {
+        mode: 'javascript',
+        lineNumbers: true
       })
     },
     dft() {
@@ -41,6 +109,7 @@ export default {
   },
   mounted() {
     const rootNode = constructTestData()
+    console.log(JSON.stringify(rootNode))
     const dft = new Dft(rootNode, null)
     dft.start()
     this.testCodeMirror()
@@ -53,10 +122,39 @@ export default {
 }
 </script>
 <style lang="less">
+.dft-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+  .left-panel {
+    width: 50vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      width: 100%;
+      height: 50%;
+
+      textarea {
+        width: 100%;
+        height: 100%;
+      }
+
 .CodeMirror {
-  text-align: left !important;
+        width: 100%;
+        height: 100%;
   padding: 16px;
   font-family: 'Courier New', Courier, monospace;
+
+        .CodeMirror-code {
+          text-align: left;
+        }
+      }
+    }
+  }
 }
 
 #tree-viz {
