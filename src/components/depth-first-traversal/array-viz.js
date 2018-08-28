@@ -2,6 +2,10 @@ import * as d3 from 'd3'
 class ArrayViz {
   constructor(array) {
     this.array = array
+    this.transition = d3
+      .transition()
+      .duration(500)
+      .ease(d3.easeLinear)
   }
 
   domId(id) {
@@ -12,27 +16,57 @@ class ArrayViz {
     return this.domId
   }
 
-  /**
-   * @override
-   */
-  push(...newItem) {
-    this.array.push(...newItem)
+  toText(func) {
+    if (func) {
+      this.toTextAccess = func
+      return this
+    }
+    return (
+      this.toTextAccess ||
+      function(d) {
+        d.toString()
+      }
+    )
+  }
+
+  vertical(isVertical) {
+    if (isVertical) {
+      this.vertical = isVertical
+      return this
+    }
+    return this.isVertical
+  }
+
+  push(newItem) {
+    this.array.push(newItem)
+    this.updateView()
     return this
   }
 
   pop() {
-    return this.array.pop()
+    const popedValue = this.array.pop()
+    this.updateView()
+    return popedValue
   }
 
   empty() {
     this.array = []
+    this.updateView()
     return this
+  }
+
+  get length() {
+    return this.array.length
   }
 
   _initAttr() {
     this.padding = 20
     this.blockSize = 60
     this.xScale = d3
+      .scaleLinear()
+      .domain([0, this.array.length])
+      .range([0, this.array.length * this.blockSize])
+    this.yScale = d3
       .scaleLinear()
       .domain([0, this.array.length])
       .range([0, this.array.length * this.blockSize])
@@ -56,40 +90,96 @@ class ArrayViz {
   }
 
   start() {
-    const self = this
     if (!this.svg) {
       this._initDom()
     }
-    d3.timer(function() {
-      self.updateView()
-    })
   }
 
   updateView() {
     this._initAttr()
-    const blocks = this.g.selectAll('rect').data(this.array)
+    const blocks = this.g.selectAll('rect').data(this.array, d => d.id)
     blocks
       .enter()
       .append('rect')
-      .attr('x', (d, i) => this.xScale(i))
-      .attr('y', this.height / 2)
+      .transition(this.transition)
+      .attr(
+        'x',
+        (d, i) =>
+          this.vertical ? this.width / 2 - this.blockSize / 2 : this.xScale(i)
+      )
+      .attr(
+        'y',
+        (d, i) =>
+          this.vertical ? this.height - this.yScale(i) : this.height / 2
+      )
+      .attr('width', this.blockSize)
+      .attr('height', this.blockSize)
+      .attr('fill', 'green')
+      .attr('stroke', 'white')
+    blocks
+      .transition(this.transition)
+      .attr(
+        'x',
+        (d, i) =>
+          this.vertical ? this.width / 2 - this.blockSize / 2 : this.xScale(i)
+      )
+      .attr(
+        'y',
+        (d, i) =>
+          this.vertical ? this.height - this.yScale(i) : this.height / 2
+      )
       .attr('width', this.blockSize)
       .attr('height', this.blockSize)
       .attr('fill', 'darkgray')
       .attr('stroke', 'white')
-    blocks.exit().remove()
 
-    const texts = this.g.selectAll('text').data(this.array)
+    blocks
+      .exit()
+      .attr('fill', 'red')
+      .transition(this.transition)
+      .style('opacity', 0)
+      .remove()
+
+    const texts = this.g.selectAll('text').data(this.array, d => d.id)
     texts
       .enter()
       .append('text')
-      .text(d => d)
-      .attr('x', (d, i) => this.xScale(i) + this.blockSize / 2)
-      .attr('y', this.height / 2 + this.blockSize / 2)
-      .attr('fill', 'black')
+      .text(d => this.toTextAccess(d))
+      .transition(this.transition)
+      .attr(
+        'x',
+        (d, i) =>
+          this.vertical ? this.width / 2 : this.xScale(i) + this.blockSize / 2
+      )
+      .attr(
+        'y',
+        (d, i) =>
+          (this.vertical ? this.height - this.yScale(i) : this.height / 2) +
+          this.blockSize / 2
+      )
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
-    texts.exit().remove()
+      .attr('fill', 'white')
+    texts
+      .text(d => this.toTextAccess(d))
+      .transition(this.transition)
+      .attr(
+        'x',
+        (d, i) =>
+          this.vertical ? this.width / 2 : this.xScale(i) + this.blockSize / 2
+      )
+      .attr(
+        'y',
+        (d, i) =>
+          (this.vertical ? this.height - this.yScale(i) : this.height / 2) +
+          this.blockSize / 2
+      )
+      .attr('text-anchor', 'middle')
+      .attr('dy', '0.35em')
+    texts
+      .exit()
+      .transition(this.transition)
+      .remove()
   }
 }
 

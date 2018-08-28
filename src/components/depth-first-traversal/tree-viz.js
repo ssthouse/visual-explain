@@ -82,21 +82,22 @@ class TreeViz {
   }
 
   dft() {
-    const stack = [this.rootNode]
-    this.stack.push(this.rootNode.value)
-    this.dftLoop(stack)
+    this.stack.push(this.rootNode)
+    setTimeout(() => {
+      this.dftLoop()
+    }, 1000)
   }
 
-  dftLoop(stack) {
-    if (stack.length !== 0) {
-      const curNode = stack.pop()
-      this.stack.pop()
-      curNode.childrenNodes.forEach(element => {
-        stack.push(element)
-        this.stack.push(element.value)
-      })
+  dftLoop() {
+    if (this.stack.length !== 0) {
+      const curNode = this.stack.pop()
       this.hightlightNode(curNode)
-      setTimeout(() => this.dftLoop(stack), 1000)
+      setTimeout(() => {
+        curNode.childrenNodes.forEach(element => {
+          this.stack.push(element)
+        })
+        setTimeout(() => this.dftLoop(), 1000)
+      }, 1000)
     }
   }
 
