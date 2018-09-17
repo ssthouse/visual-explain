@@ -97,7 +97,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .tree-container {
   position: relative;
   width: 100%;
