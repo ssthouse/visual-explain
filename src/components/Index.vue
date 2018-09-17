@@ -9,6 +9,7 @@
 
 <script>
 import filePath from '../assets/github-viz.png'
+import dftDemoPath from '../assets/dft-demo.png'
 
 export default {
   name: 'Root',
@@ -35,8 +36,7 @@ export default {
         {
           title: 'Depth first traversal',
           to: '/list/dft',
-          imgSrc:
-            'https://raw.githubusercontent.com/ssthouse/d3-blog/master/mobile-patent-suit/img/row_display.png'
+          imgSrc: dftDemoPath
         }
       ]
     }
