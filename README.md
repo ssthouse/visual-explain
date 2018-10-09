@@ -15,3 +15,11 @@ with the help of visualization, people can easily get key point of the complicat
 ![forward and backword](https://raw.githubusercontent.com/ssthouse/d3-blog/master/dom-render/img/forward_and_backword.gif)
 
 ![auto play](https://raw.githubusercontent.com/ssthouse/d3-blog/master/dom-render/img/autoplay.gif)
+
+### [Mobile Patent Suit](https://ssthouse.github.io/visual-explain/#/list/patent-suit)
+
+![demo](https://raw.githubusercontent.com/ssthouse/visual-explain/master/img/mobile-patent-suit.gif)
+
+### [Visual Github Repo](https://ssthouse.github.io/github-visualization/#/main?user=ssthouse)
+
+![demo](https://raw.githubusercontent.com/ssthouse/visual-explain/master/img/visual-github-repo.gif)
