@@ -1,10 +1,12 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import DOMRender from '../components/dom-render/DomRender'
-import PatentSuit from '../components/mobile-patent-suit/PatentSuit'
-import DftExplain from '../components/depth-first-traversal/DftExplain'
-import VisualPrototype from '../components/js-prototype/VisualPrototype'
 import Index from '../components/Index'
+import Router from 'vue-router'
+const DOMRender = () => import('../components/dom-render/DomRender')
+const PatentSuit = () => import('../components/mobile-patent-suit/PatentSuit')
+const DftExplain = () =>
+  import('../components/depth-first-traversal/DftExplain')
+const VisualPrototype = () =>
+  import('../components/js-prototype/VisualPrototype')
 
 Vue.use(Router)
 
