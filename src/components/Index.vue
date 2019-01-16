@@ -37,6 +37,11 @@ export default {
           title: 'Depth first traversal',
           to: '/list/dft',
           imgSrc: dftDemoPath
+        },
+        {
+          title: 'JavaScript Prototype',
+          to: '/list/js-prototype',
+          imgSrc: dftDemoPath
         }
       ]
     }
