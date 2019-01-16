@@ -14,6 +14,7 @@
     "@ssthouse/personal-component-set": "^0.1.5",
     "codemirror": "^5.39.2",
     "d3": "^5.0.0",
+    "d3-tip": "^0.9.1",
     "less": "^3.5.1",
     "less-loader": "^4.1.0",
     "vue": "^2.0.8",

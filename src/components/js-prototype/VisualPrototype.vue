@@ -1,27 +1,39 @@
 <template>
   <div class="visual-prototype">
     <div class="variable-view-container">
-      <variable-view :variable="variable"></variable-view>
+      <variable-view ref="variableView" :variable="variable"></variable-view>
     </div>
     <div>code editor</div>
+    <button @click="update">update</button>
   </div>
 </template>
 
 <script>
 import VariableView from './VariableView'
 
+function SayHi() {}
+
+SayHi.prototype.hi = function() {
+  console.log('hi')
+}
+
 export default {
   name: 'VisualPrototype',
   components: { 'variable-view': VariableView },
   data() {
     return {
-      variable: function() {
-        console.log('hi')
-      }
+      variable: new SayHi()
     }
   },
-  methods: {},
-  mounted() {}
+  methods: {
+    update: function() {
+      this.$refs.variableView.update()
+      console.log(this.$d3.tip)
+    }
+  },
+  mounted() {
+
+  }
 }
 </script>
 
@@ -32,5 +44,9 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  .variable-view-container {
+    width: 100%;
+  }
 }
 </style>
