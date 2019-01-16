@@ -1,7 +1,9 @@
+before_install:
+  - npm i -g npm@6.4.1
 language: node_js
 node_js:
   - "node"
-  - "8"
+  - "11"
 script: npm run build
 deploy:
   provider: pages
