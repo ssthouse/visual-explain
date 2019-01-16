@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import * as d3 from 'd3'
-import '@ssthouse/personal-component-set'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 

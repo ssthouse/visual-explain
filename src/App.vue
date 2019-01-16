@@ -6,8 +6,11 @@
 </template>
 
 <script>
+import TopBar from '@ssthouse/personal-component-set/src/components/TopBar.vue'
+
 export default {
   name: 'App',
+  components: { 'top-bar': TopBar },
   data() {
     return {
       sourceCodeLink: 'https://github.com/ssthouse/visual-explain',
