@@ -45,10 +45,10 @@ export default {
         curNode.setNext(nextProtoNode)
         curNode = nextProtoNode
       }
-      console.log(head.getNext())
       return head.next
     },
     renderProtoNodes(nodeList) {
+      console.log(nodeList)
       let self = this
       let circleSelection = this.$d3
         .select('#variable-view')
@@ -80,11 +80,20 @@ export default {
     }
   },
   mounted() {
+    function objToJson(obj) {
+      if (!obj) return 'null'
+      let result = {}
+      Object.keys(obj).forEach(key => {
+        result[key] = obj[key].toString()
+      })
+      return JSON.stringify(result, null, 4)
+    }
+
     this.tipCaller = tip()
       .attr('class', 'tip-container')
       .offset([-10, 0])
       .html(d => {
-        return `<span>Hi, I am a tip!</span>`
+        return `<div style="white-space: pre;">${objToJson(d.proto)}</div>`
       })
     let svgSelection = this.$d3.select('#variable-view')
     svgSelection.call(this.tipCaller)

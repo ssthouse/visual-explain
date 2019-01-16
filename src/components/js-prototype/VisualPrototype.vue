@@ -17,6 +17,10 @@ SayHi.prototype.hi = function() {
   console.log('hi')
 }
 
+SayHi.prototype.show = function() {
+  console.log('Here I am')
+}
+
 export default {
   name: 'VisualPrototype',
   components: { 'variable-view': VariableView },
@@ -31,9 +35,7 @@ export default {
       console.log(this.$d3.tip)
     }
   },
-  mounted() {
-
-  }
+  mounted() {}
 }
 </script>
 
@@ -46,6 +48,8 @@ export default {
   justify-content: center;
 
   .variable-view-container {
+    padding-left: 100px;
+    padding-top: 100px;
     width: 100%;
   }
 }
