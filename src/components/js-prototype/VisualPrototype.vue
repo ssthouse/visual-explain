@@ -3,8 +3,13 @@
     <div class="variable-view-container">
       <variable-view ref="variableView" :variable="variable"></variable-view>
     </div>
-    <div>code editor</div>
-    <button @click="update">update</button>
+    <div class="operation-panel">
+      <div class="code-editor">code editor</div>
+      <div class="operation-buttons">
+        <v-btn @click="executeCode">Execute Code</v-btn>
+        <v-btn @click="update">Update</v-btn>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,6 +38,9 @@ export default {
     update: function() {
       this.$refs.variableView.update()
       console.log(this.$d3.tip)
+    },
+    executeCode() {
+      console.log(`execute code ~`)
     }
   },
   mounted() {}
@@ -43,14 +51,25 @@ export default {
 <style lang="less">
 .visual-prototype {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
   .variable-view-container {
+    flex-grow: 1;
     padding-left: 100px;
     padding-top: 400px;
-    width: 100%;
+    min-width: 720px;
+  }
+
+  .operation-panel {
+    min-width: 720px;
+    min-height: 500px;
+    flex-grow: 1;
+
+    .code-editor {
+    }
   }
 }
 </style>
