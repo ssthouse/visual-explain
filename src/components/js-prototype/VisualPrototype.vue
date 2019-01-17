@@ -4,7 +4,9 @@
       <variable-view ref="variableView" :variable="variable"></variable-view>
     </div>
     <div class="operation-panel">
-      <div class="code-editor">code editor</div>
+      <div class="code-editor">
+        <textarea ref="textarea" :v-model="defaultCode"></textarea>
+      </div>
       <div class="operation-buttons">
         <v-btn @click="executeCode">Execute Code</v-btn>
         <v-btn @click="update">Update</v-btn>
@@ -15,6 +17,9 @@
 
 <script>
 import VariableView from './VariableView'
+import CodeMirror from 'codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/javascript/javascript.js'
 
 function SayHi() {}
 
@@ -31,19 +36,50 @@ export default {
   components: { 'variable-view': VariableView },
   data() {
     return {
-      variable: new SayHi()
+      variable: new SayHi(),
+      codeEditor: null,
+      defaultCode: `
+function SayHi() {}
+
+SayHi.prototype.hi = function() {
+  console.log('hi')
+}
+
+function SayHello(){}
+SayHello.prototype.hello = function(){}
+Object.setPrototypeOf(SayHello, new SayHi())
+
+function SayBye (){}
+SayBye.prototype.bye = function(){}
+Object.setPrototypeOf(SayBye, new SayHello())
+
+new SayBye()
+`
     }
   },
   methods: {
     update: function() {
+      console.log(this.codeEditor.getValue())
       this.$refs.variableView.update()
-      console.log(this.$d3.tip)
     },
     executeCode() {
-      console.log(`execute code ~`)
+      // eslint-disable-next-line
+      const variable = eval.call({}, this.codeEditor.getValue())
+      if (variable) this.variable = variable
+      console.log(variable)
+    },
+    initCodeEditor() {
+      this.codeEditor = CodeMirror.fromTextArea(this.$refs.textarea, {
+        mode: 'javascript',
+        lineNumbers: true,
+        value: this.defaultCode
+      })
+      this.codeEditor.setValue(this.defaultCode)
     }
   },
-  mounted() {}
+  mounted() {
+    this.initCodeEditor()
+  }
 }
 </script>
 
@@ -69,6 +105,9 @@ export default {
     flex-grow: 1;
 
     .code-editor {
+      .CodeMirror-sizer {
+        text-align: left;
+      }
     }
   }
 }
