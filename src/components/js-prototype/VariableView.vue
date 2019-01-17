@@ -1,13 +1,13 @@
 <template>
   <div class="variable-view">
     <svg id="variable-view">
-      {{variable.toString()}}
     </svg>
     <div class="tooltip-container"></div>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import tip from 'd3-tip'
 
 class PrototypeNode {
@@ -30,7 +30,7 @@ export default {
   props: ['variable'],
   data() {
     return {
-      circieRadius: 100,
+      circieRadius: 80,
       tipCaller: null
     }
   },
@@ -59,10 +59,10 @@ export default {
         .enter()
         .append('circle')
         .attr('cx', (data, index) => {
-          return self.circieRadius + index * 100
+          return self.circieRadius + index * this.circieRadius * 2.3
         })
         .attr('cy', 100)
-        .attr('r', 30)
+        .attr('r', this.circieRadius)
         .attr('fill', 'lightgrey')
         .on('mouseover', self.tipCaller.show)
         .on('mouseout', self.tipCaller.hide)
@@ -72,17 +72,40 @@ export default {
       this.$d3
         .select('#variable-view')
         .selectAll('text')
+        .remove()
+      this.$d3
+        .select('#variable-view')
+        .selectAll('text')
         .data(nodeList)
         .enter()
         .append('text')
-        .text(d => {
-          return d.proto !== null ? d.proto.constructor.name : 'null'
+        .text((d, index) => {
+          return (
+            index + '\ntype: ' + (d.proto !== null ? typeof d.proto : 'null')
+          )
         })
         .attr('x', (data, index) => {
-          return self.circieRadius + index * 100
+          return self.circieRadius + index * this.circieRadius * 2.3
         })
         .attr('y', 100)
         .attr('dy', '8')
+
+      // draw lines
+      let line = this.$d3
+        .line()
+        .x(d => d[0])
+        .y(d => d[1])
+      this.$d3
+        .select('#variable-view')
+        .selectAll('path')
+        .data([
+          [[100, 100], [200, 200]],
+          [[100, 100], [200, 200]],
+          [[100, 100], [200, 200]]
+        ])
+        .enter()
+        .append('path')
+        .attr('d', line)
     },
     update() {
       let headProtoNode = this.constructPrototypeNodeList()
@@ -97,9 +120,11 @@ export default {
   },
   mounted() {
     function objToJson(obj) {
+      const unAccessableKeys = ['caller', 'callee', 'arguments']
       if (!obj) return 'null'
       let result = {}
       Object.getOwnPropertyNames(obj).forEach(key => {
+        if (unAccessableKeys.indexOf(key) !== -1) return
         result[key] = obj[key] + ''
       })
       return JSON.stringify(result, null, 4)
@@ -111,8 +136,8 @@ export default {
       .html(d => {
         return `<div class="tooltip-container" style="white-space: pre; background-color: white;padding: 8px;
           border-radius: 8px; box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);">${objToJson(
-           d.proto
-         )}</div>`
+            d.proto
+          )}</div>`
       })
     let svgSelection = this.$d3.select('#variable-view')
     svgSelection.call(this.tipCaller)
@@ -147,6 +172,11 @@ export default {
       font-size: 20px;
       pointer-events: none;
       text-anchor: middle;
+    }
+
+    path {
+      stroke: black;
+      stroke-width: 2px;
     }
   }
 }
