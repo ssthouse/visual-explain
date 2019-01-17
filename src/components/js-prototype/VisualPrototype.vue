@@ -49,7 +49,7 @@ export default {
 
   .variable-view-container {
     padding-left: 100px;
-    padding-top: 100px;
+    padding-top: 400px;
     width: 100%;
   }
 }
