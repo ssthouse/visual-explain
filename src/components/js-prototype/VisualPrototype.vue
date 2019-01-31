@@ -9,7 +9,6 @@
       </div>
       <div class="operation-buttons">
         <v-btn @click="executeCode">Execute Code</v-btn>
-        <v-btn @click="update">Update</v-btn>
       </div>
     </div>
   </div>
@@ -59,7 +58,6 @@ new SayBye()
   },
   methods: {
     update: function() {
-      console.log(this.codeEditor.getValue())
       this.$refs.variableView.update()
     },
     executeCode() {
@@ -67,6 +65,7 @@ new SayBye()
       const variable = eval.call({}, this.codeEditor.getValue())
       if (variable) this.variable = variable
       console.log(variable)
+      this.update()
     },
     initCodeEditor() {
       this.codeEditor = CodeMirror.fromTextArea(this.$refs.textarea, {

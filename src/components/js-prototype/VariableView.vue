@@ -31,10 +31,26 @@ export default {
   data() {
     return {
       circieRadius: 80,
-      tipCaller: null
+      tipCaller: null,
+      arrowId: 'triangle'
     }
   },
   methods: {
+    initArrowInSvg() {
+      this.$d3
+        .select('#variable-view')
+        .append('svg:defs')
+        .append('svg:marker')
+        .attr('id', this.arrowId)
+        .attr('refX', 6)
+        .attr('refY', 6)
+        .attr('markerWidth', 30)
+        .attr('markerHeight', 30)
+        .attr('orient', 'auto')
+        .append('path')
+        .attr('d', 'M 0 0 12 6 0 12 3 6')
+        .style('fill', 'black')
+    },
     constructPrototypeNodeList() {
       // 1. construct linked list for prototype array
       let head = new PrototypeNode(null)
@@ -81,7 +97,9 @@ export default {
         .append('text')
         .text((d, index) => {
           return (
-            index + '\ntype: ' + (d.proto !== null ? typeof d.proto : 'null')
+            `${nodeList.length - index}` +
+            '\ntype: ' +
+            (d.proto !== null ? typeof d.proto : 'null')
           )
         })
         .attr('x', (data, index) => {
@@ -95,17 +113,25 @@ export default {
         .line()
         .x(d => d[0])
         .y(d => d[1])
+
+      const data = []
+      for (let i = 1; i < nodeList.length; i++) {
+        const beginX = this.circieRadius + (i - 1) * this.circieRadius * 2.3
+        const beginY = 100
+        const endX = i * this.circieRadius * 2.3
+        const endY = 100
+        data.push([[beginX, beginY], [endX, endY]])
+      }
+      console.log(data)
       this.$d3
         .select('#variable-view')
-        .selectAll('path')
-        .data([
-          [[100, 100], [200, 200]],
-          [[100, 100], [200, 200]],
-          [[100, 100], [200, 200]]
-        ])
+        .selectAll('.line')
+        .data(data)
         .enter()
         .append('path')
         .attr('d', line)
+        .attr('class', 'line')
+        .attr('marker-end', `url(#${this.arrowId})`)
     },
     update() {
       let headProtoNode = this.constructPrototypeNodeList()
@@ -141,6 +167,7 @@ export default {
       })
     let svgSelection = this.$d3.select('#variable-view')
     svgSelection.call(this.tipCaller)
+    this.initArrowInSvg()
   }
 }
 </script>
@@ -148,9 +175,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
 .tip-container {
-  background-color: red;
   border-radius: 8px;
-  font-size: 100px;
 }
 
 .variable-view {
