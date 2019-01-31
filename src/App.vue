@@ -28,10 +28,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
 body {
   width: 100vw;
   height: 100vh;
+}
+
+* {
+  padding: 0;
+  margin: 0;
 }
 
 #app {
