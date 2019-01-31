@@ -1,8 +1,10 @@
 <template>
-  <div class="index-list">
-    <div v-for="item in links" v-bind:key="item.to" class="item" @click="goto(item.to)">
-      <span class="title" :to="item.to">{{item.title}}</span>
-      <img :src="item.imgSrc" />
+  <div id="index-container">
+    <div class="index-list">
+      <div v-for="item in links" v-bind:key="item.to" class="item" @click="goto(item.to)">
+        <span class="title" :to="item.to">{{item.title}}</span>
+        <img :src="item.imgSrc" />
+      </div>
     </div>
   </div>
 </template>
@@ -67,48 +69,51 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
-* {
-  padding: 0;
-  margin: 0;
-}
+#index-container {
+  height: 100%;
+  overflow-y: scroll !important;
 
-.index-list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  .item {
-    cursor: pointer;
-    position: relative;
+  .index-list {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    width: 70vw;
-    height: 180px;
-    margin: 16px;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
 
-    .title {
-      width: 100%;
-      text-align: left;
-      padding: 8px;
-      background-color: #eeeeee;
-      z-index: 100;
+    .item {
+      min-height: 180px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 70vw;
+      height: 180px;
+      margin: 16px;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+        0 3px 10px 0 rgba(0, 0, 0, 0.19);
+
+      .title {
+        width: 100%;
+        text-align: left;
+        padding: 8px;
+        background-color: #eeeeee;
+        z-index: 100;
+      }
+
+      img {
+        position: absolute;
+        width: 100%;
+        box-shadow: none;
+      }
     }
 
-    img {
-      position: absolute;
-      width: 100%;
-      box-shadow: none;
+    .item:hover {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      transition: box-shadow 500ms;
     }
-  }
-
-  .item:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    transition: box-shadow 500ms;
   }
 }
 </style>
